@@ -3953,14 +3953,6 @@
                 feedbackMessage.style.display = 'block';
                 correctAnswerText.textContent = correctAnswers.join(', ');
                 
-                // 添加错题提醒
-                setTimeout(() => {
-                    const questionId = getQuestionId(question);
-                    const inWrongList = wrongQuestions.some(item => item.id === questionId);
-                    if (inWrongList) {
-                        showToast('此题已添加到错题本，可在错题本中查看', 'info');
-                    }
-                }, 500);
             }
             
             // 保存答案状态
