@@ -1767,7 +1767,170 @@
                 -webkit-appearance: none;
                 touch-action: manipulation;
             }
-        }          
+        }    
+        /* 手机版概况卡片优化 */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px;
+            }
+            
+            .stat-card {
+                padding: 12px !important;
+                min-height: 80px;
+            }
+            
+            .stat-card .stat-value {
+                font-size: 1.2rem !important;
+            }
+            
+            .stat-card .stat-label {
+                font-size: 0.8rem !important;
+            }
+            
+            .stat-card .stat-icon {
+                width: 30px !important;
+                height: 30px !important;
+                font-size: 1rem !important;
+                margin-bottom: 8px !important;
+            }
+        }
+
+        /* 更小屏幕进一步优化 */
+        @media (max-width: 480px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px;
+            }
+            
+            .stat-card {
+                padding: 10px !important;
+            }
+            
+            .stat-card .stat-value {
+                font-size: 1.1rem !important;
+            }
+            
+            .grid.grid-cols-3 {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px;
+            }
+            
+            .grid.grid-cols-3 .stat-value {
+                font-size: 1rem !important;
+            }
+        }     
+        /* 首页卡片统一大小 */
+        #dashboard .card {
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #dashboard .dashboard-grid .stat-card {
+            min-height: 120px;
+        }
+
+        #dashboard .card > h2 {
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+
+        #dashboard .card .flex.justify-between.items-center {
+            flex-shrink: 0;
+        }
+
+        #dashboard .progress-bar {
+            margin: 12px 0;
+        }
+
+        #dashboard .grid.grid-cols-3 {
+            margin-top: 16px;
+        } 
+        /* 版本更新说明样式 */
+        .changelog-content {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .changelog-version {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .changelog-version:last-child {
+            border-bottom: none;
+        }
+
+        .changelog-version h3 {
+            color: var(--primary);
+            margin-bottom: 4px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .changelog-date {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-bottom: 12px;
+        }
+
+        .changelog-section {
+            margin-bottom: 16px;
+        }
+
+        .changelog-section h4 {
+            color: var(--gray-700);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .changelog-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .changelog-content li {
+            margin-bottom: 6px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .changelog-content li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .changelog-section ul li {
+            color: var(--gray-600);
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .changelog-content {
+                max-height: 50vh;
+            }
+            
+            .changelog-version h3 {
+                font-size: 1rem;
+            }
+            
+            .changelog-content li {
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1941,7 +2104,84 @@
     </div>
 
     <!-- 主页面 -->
-
+    <!-- 版本更新说明弹窗 -->
+    <div class="modal-overlay" id="changelogModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>版本更新说明</h2>
+                <button class="close-modal" id="closeChangelogModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="changelog-content">
+                    <div class="changelog-version">
+                        <h3><i class="fas fa-star text-warning"></i> v2.1.15 (当前版本)</h3>
+                        <div class="changelog-date">发布日期: 2026-01-03</div>
+                        <div class="changelog-section">
+                            <h4><i class="fas fa-bug text-danger"></i> Bug修复</h4>
+                            <ul>
+                                <li><strong>待修复自动跳转功能</strong>: 自动跳转不生效</li>
+                                <li><strong>修复多选题判断逻辑</strong>: 多选题不再选一个选项就立即判断，需要手动提交</li>
+                                <li><strong>待修复选项残留问题</strong>: （暂时先别用快捷键）快捷键选择选项会延续到下一题的问题</li>
+                                <li><strong>修复移动端布局</strong>: 优化了小屏幕设备上的显示效果</li>
+                                <li><strong>修复侧边栏状态保存</strong>: 侧边栏收起状态现在可以正确保存</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="changelog-section">
+                            <h4><i class="fas fa-plus-circle text-success"></i> 新功能</h4>
+                            <ul>
+                                <li><strong>快捷键优化</strong>: 新增ESC键取消自动跳转，优化数字键选择逻辑</li>
+                                <li><strong>答题反馈增强</strong>: 添加答题正确/错误的视觉反馈动画</li>
+                                <li><strong>数据管理界面</strong>: 新增数据导入/导出统计显示</li>
+                                <li><strong>移动端优化</strong>: 添加移动端专属设置项和触摸优化</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="changelog-version">
+                        <h3><i class="fas fa-history text-primary"></i> v2.1.0</h3>
+                        <div class="changelog-date">发布日期: 2026-01-02</div>
+                        <ul>
+                            <li>新增数据管理功能，支持完整的数据备份和恢复</li>
+                            <li>添加自动跳转设置，可配置答对后自动跳转延迟</li>
+                            <li>优化侧边栏收起/展开功能</li>
+                            <li>新增移动端触摸优化，改善小屏幕体验</li>
+                            <li>添加键盘快捷键提示</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="changelog-version">
+                        <h3><i class="fas fa-history text-primary"></i> v2.0.0</h3>
+                        <div class="changelog-date">发布日期: 2026-01-01</div>
+                        <ul>
+                            <li>全新界面设计，采用现代化卡片布局</li>
+                            <li>新增错题本功能，支持筛选和统计</li>
+                            <li>添加学习进度跟踪和统计面板</li>
+                            <li>支持多种练习模式（顺序、随机、混合）</li>
+                            <li>新增导入/导出功能，支持JSON格式题库</li>
+                        </ul>
+                    </div>
+                    <div class="changelog-version">
+                        <h3><i class="fas fa-history text-primary"></i> v1.0.0</h3>
+                        <div class="changelog-date">发布日期: 2025-12-31</div>
+                        <ul>
+                            <li>传统界面设计</li>
+                            <li>错题本功能，支持筛选和统计</li>
+                            <li>支持顺序练习</li>
+                            <li>导入/导出功能，支持word格式题库</li>
+                        </ul>
+                    </div>                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeChangelogBtn">
+                    <i class="fas fa-check"></i> 我知道了
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- 侧边栏导航 -->
     <!-- 侧边栏导航 -->
@@ -1994,6 +2234,10 @@
                     <i class="fas fa-question-circle"></i> <span class="link-text">使用教程</span>
                 </a>
                 <!-- 移除原有的导入导出按钮，因为现在有专门的界面 -->
+                <a href="#" class="sidebar-link" id="showChangelogBtn">
+                    <i class="fas fa-code-branch"></i> <span class="link-text">版本更新</span>
+                    <span class="badge" style="background: var(--success);">v2.1.1</span>
+                </a>
                 </div>
             </div>
         </div>
@@ -2169,7 +2413,7 @@
                     
                     <div class="flex gap-3">
                         <button class="nav-btn show-answer" id="showAnswerBtn">
-                            <i class="fas fa-lightbulb"></i> 显示答案
+                            <i class="fas fa-lightbulb"></i> 检查答案
                         </button>
                         <button class="nav-btn next" id="nextBtn">
                             下一题 <i class="fas fa-chevron-right"></i>
@@ -2443,8 +2687,9 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2026 XJQ版权所有 v2.1.1 仅供学习使用.</p>
+                <p>&copy; 2026 XJQ版权所有 v2.1.15 仅供学习使用.</p>
                 <p style="margin-top: 4px; font-size: 0.8rem;">数据存储在浏览器本地，请勿清除浏览器数据</p>
+                <i class="fas fa-sync-alt"></i> 检查更新
             </div>
         </div>
     </footer>
@@ -2549,6 +2794,7 @@
 
         // ===== 初始化函数 =====
         function init() {
+            checkFirstVisitWithNewVersion();
             // 检查是否首次访问
             const firstVisit = localStorage.getItem('firstVisit');
             if (!firstVisit) {
@@ -2610,6 +2856,26 @@
                     }
                 });
             });
+            const showChangelogBtn = document.getElementById('showChangelogBtn');
+            const closeChangelogModal = document.getElementById('closeChangelogModal');
+            const closeChangelogBtn = document.getElementById('closeChangelogBtn');
+            const changelogModal = document.getElementById('changelogModal');
+
+            if (showChangelogBtn) {
+                showChangelogBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showModal(changelogModal);
+                    hideSidebar();
+                });
+            }
+
+            if (closeChangelogModal) {
+                closeChangelogModal.addEventListener('click', () => hideModal(changelogModal));
+            }
+
+            if (closeChangelogBtn) {
+                closeChangelogBtn.addEventListener('click', () => hideModal(changelogModal));
+            }
             // 底部页脚链接事件
             document.querySelectorAll('footer a[data-tab]').forEach(link => {
                 link.addEventListener('click', (e) => {
@@ -2969,7 +3235,27 @@
             // 添加移动端专用设置项
             addMobileSpecificSettings();
         }
+        // 检查更新功能
+        const checkUpdateBtn = document.getElementById('checkUpdateBtn');
+        if (checkUpdateBtn) {
+            checkUpdateBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                showModal(changelogModal);
+            });
+        }
 
+        // 首次访问时显示更新说明
+        function checkFirstVisitWithNewVersion() {
+            const lastVersion = localStorage.getItem('lastVersionSeen');
+            const currentVersion = '2.1.1';
+            
+            if (!lastVersion || lastVersion !== currentVersion) {
+                setTimeout(() => {
+                    showModal(changelogModal);
+                    localStorage.setItem('lastVersionSeen', currentVersion);
+                }, 1000);
+            }
+        }
         // 添加移动端专用设置项
         function addMobileSpecificSettings() {
             // 在设置表单末尾添加移动端专用选项
@@ -3105,6 +3391,9 @@
 
         // ===== 开始练习 =====
         function startPractice() {
+            // 确保加载最新设置
+            loadSavedData();
+            
             // 获取设置
             const selectedChapters = Array.from(chapterSelect.selectedOptions).map(option => option.value);
             const includeSingle = document.getElementById('singleChoice')?.checked ?? true;
@@ -3185,31 +3474,23 @@
             // 更新练习徽章
             updatePracticeBadge();
             
-            // 关闭设置弹窗
+            // 关闭设置弹窗（如果有）
             hideModal(settingsModal);
+            
+            showToast(`开始练习 ${currentQuestions.length} 道题目`, 'success');
         }
 
         // ===== 显示题目 =====
+        // ===== 修改 showQuestion 函数，清除残留选项状态 =====
         function showQuestion(index) {
-            // 添加键盘操作提示
-            const keyboardHint = document.createElement('div');
-            keyboardHint.className = 'keyboard-hint mt-3 text-center text-muted text-sm';
-            keyboardHint.innerHTML = `
-                <i class="fas fa-keyboard"></i> 快捷键：空格键显示答案，←→箭头键切换题目，ESC键取消自动跳转，1-4选择选项，多选enter提交答案
-            `;
-            
-            // 检查是否已存在提示，如果不存在则添加
-            if (!document.querySelector('.keyboard-hint')) {
-                document.querySelector('.question-content')?.appendChild(keyboardHint);
-            }
             // 清除自动跳转计时器
             cancelAutoNextTimer();
+    
             
-            if (currentQuestions.length === 0 || index < 0 || index >= currentQuestions.length) {
-                return;
-            }
+
             
             const question = currentQuestions[index];
+            const questionId = getQuestionId(question);
             
             // 更新题目信息
             currentQuestionNumber.textContent = index + 1;
@@ -3257,7 +3538,6 @@
             }
             
             // 检查是否已选择答案
-            const questionId = getQuestionId(question);
             if (userAnswers[questionId]) {
                 const selectedOptions = userAnswers[questionId].selected;
                 const correctOptions = getCorrectAnswers(question);
@@ -3269,7 +3549,7 @@
                         option.classList.add('selected');
                         
                         if (userAnswers[questionId].checked) {
-                            if (selectedOptions.join('') === correctOptions.join('')) {
+                            if (userAnswers[questionId].correct) {
                                 option.classList.add('correct');
                             } else {
                                 option.classList.add('incorrect');
@@ -3288,13 +3568,32 @@
             prevBtn.disabled = index === 0;
             nextBtn.disabled = index === currentQuestions.length - 1;
             
-            // 隐藏答案反馈
-            answerFeedback.classList.remove('show');
+            // 隐藏答案反馈（清除之前的状态）
+            answerFeedback.classList.remove('show', 'correct', 'incorrect');
+            
+            // 恢复反馈标题的默认状态
+            const feedbackTitle = document.getElementById('feedbackTitle');
+            if (feedbackTitle) {
+                if (userAnswers[questionId] && userAnswers[questionId].checked) {
+                    if (userAnswers[questionId].correct) {
+                        feedbackTitle.innerHTML = '<i class="fas fa-check-circle"></i> 回答正确！';
+                    } else {
+                        feedbackTitle.innerHTML = '<i class="fas fa-times-circle"></i> 回答错误';
+                    }
+                } else {
+                    // 清除倒计时显示
+                    feedbackTitle.innerHTML = feedbackTitle.innerHTML.replace(/<span id="countdownTimer">.*<\/span>/, '');
+                }
+            }
             
             // 滚动到顶部
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
+        function clearOptionStates() {
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+        }
         // ===== 分页功能 =====
         function updatePagination() {
             if (!paginationContainer) return;
@@ -3373,8 +3672,20 @@
             
             return button;
         }
+        // ===== 添加 clearOptionStates 函数 =====
+        function clearOptionStates() {
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+                const optionIndex = option.querySelector('.option-index');
+                if (optionIndex) {
+                    optionIndex.className = 'option-index';
+                }
+            });
+        }
 
         // ===== 修改selectOption函数，确保手动选择答案时也能触发自动跳转 =====
+        // ===== 修改 selectOption 函数 =====
         function selectOption(optionElement, questionType) {
             const question = currentQuestions[currentQuestionIndex];
             const questionId = getQuestionId(question);
@@ -3390,13 +3701,28 @@
             }
             
             if (questionType === 'single_choice') {
+                // 清除所有选项的选择状态
                 document.querySelectorAll('.option').forEach(opt => {
                     opt.classList.remove('selected');
+                    opt.classList.remove('correct'); // 清除之前的正确状态
+                    opt.classList.remove('incorrect'); // 清除之前的错误状态
                 });
                 
+                // 设置当前选项为选中
                 optionElement.classList.add('selected');
                 userAnswers[questionId].selected = [optionValue];
+                
+                // 对于单选题，选中后立即检查答案
+                // 如果启用了自动检查或者设置了自动跳转，就自动检查答案
+                if (settings.autoCheck === 'auto' || settings.autoNextOnCorrect !== 'disabled') {
+                    // 稍作延迟，让用户看到选中状态
+                    setTimeout(() => {
+                        checkAnswer(question);
+                    }, 300);
+                }
+                
             } else {
+                // 多选题：更新选择但不自动检查
                 const index = userAnswers[questionId].selected.indexOf(optionValue);
                 
                 if (index === -1) {
@@ -3406,25 +3732,28 @@
                     userAnswers[questionId].selected.splice(index, 1);
                     optionElement.classList.remove('selected');
                 }
+                
+                // 多选题不自动检查，需要用户手动提交
             }
             
             saveUserAnswers();
-            
-            if (settings.autoCheck === 'auto') {
-                checkAnswer(question);
-            }
         }
 
+
         // ===== 修改checkAnswer函数，添加自动跳转逻辑 =====
+        // ===== 修改 checkAnswer 函数 =====
         function checkAnswer(question) {
             const questionId = getQuestionId(question);
             
             if (!userAnswers[questionId] || userAnswers[questionId].selected.length === 0) {
+                showToast('请先选择答案', 'warning');
                 return;
             }
             
             const correctAnswers = getCorrectAnswers(question);
             const userSelected = userAnswers[questionId].selected;
+            
+            // 对多选题，需要排序后比较
             const isCorrect = JSON.stringify(userSelected.sort()) === JSON.stringify(correctAnswers.sort());
             
             userAnswers[questionId].correct = isCorrect;
@@ -3436,13 +3765,20 @@
             // 显示反馈
             showFeedback(question, userSelected);
             
-            // 标记选项
+            // 标记选项正确/错误状态
             document.querySelectorAll('.option').forEach(option => {
                 const optionValue = option.dataset.value;
                 
+                // 先清除所有状态
+                option.classList.remove('correct', 'incorrect');
+                
+                // 标记正确选项
                 if (correctAnswers.includes(optionValue)) {
                     option.classList.add('correct');
-                } else if (userSelected.includes(optionValue) && !correctAnswers.includes(optionValue)) {
+                }
+                
+                // 标记用户选择的错误选项
+                if (userSelected.includes(optionValue) && !correctAnswers.includes(optionValue)) {
                     option.classList.add('incorrect');
                 }
             });
@@ -3454,7 +3790,11 @@
                 cancelAutoNextTimer();
             } else {
                 // 答对时，根据设置启动自动跳转计时器
-                if (settings.autoCheck === 'auto') {
+                // 只有当 autoNextOnCorrect 设置不为 'disabled' 时才启动计时器
+                if (settings.autoNextOnCorrect !== 'disabled') {
+                    startAutoNextTimer();
+                } else if (settings.autoCheck === 'auto') {
+                    // 如果启用了自动检查，也启动计时器
                     startAutoNextTimer();
                 }
             }
@@ -3462,7 +3802,6 @@
             // 保存答案
             saveUserAnswers();
         }
-
         function showFeedback(question, userSelected) {
             const correctAnswers = getCorrectAnswers(question);
             const isCorrect = JSON.stringify(userSelected.sort()) === JSON.stringify(correctAnswers.sort());
@@ -3528,8 +3867,7 @@
             // 如果没有检查答案，先检查
             if (userAnswers[questionId] && userAnswers[questionId].selected.length > 0 && !userAnswers[questionId].checked) {
                 checkAnswer(question);
-                // 如果启用了自动跳转，这里会启动计时器，但我们马上要跳转，所以需要清除
-                cancelAutoNextTimer();
+                return; // 等待checkAnswer完成后通过计时器跳转
             }
             
             if (currentQuestionIndex < currentQuestions.length - 1) {
@@ -3544,10 +3882,21 @@
         // ===== 修改showAnswer函数 =====
         function showAnswer() {
             const question = currentQuestions[currentQuestionIndex];
-            checkAnswer(question);
+            const questionId = getQuestionId(question);
             
-            // 如果启用了自动跳转，启动计时器
+            // 如果没有检查答案，则检查答案
+            if (!userAnswers[questionId] || !userAnswers[questionId].checked) {
+                checkAnswer(question);
+            } else {
+                // 如果已经检查过答案，则直接显示反馈
+                showFeedback(question, userAnswers[questionId].selected);
+            }
+            
+            // 如果启用了自动跳转，启动计时器（即使已经检查过答案）
             if (settings.autoNextOnCorrect !== 'disabled') {
+                startAutoNextTimer();
+            } else if (settings.autoCheck === 'auto') {
+                // 如果设置了自动检查模式，也启动计时器
                 startAutoNextTimer();
             }
         }
@@ -4016,15 +4365,40 @@
         }
 
         function practiceWrongQuestions() {
-            if (wrongQuestions.length === 0) {
-                showToast('错题本为空', 'warning');
+            // 获取筛选后的错题（从updateWrongQuestionsList的筛选逻辑复制）
+            const chapterFilter = filterChapter.value;
+            const typeFilter = filterType.value;
+            const statusFilter = filterStatus.value;
+            
+            let filteredWrongQuestions = wrongQuestions;
+            
+            if (chapterFilter !== 'all') {
+                filteredWrongQuestions = filteredWrongQuestions.filter(item => 
+                    item.chapterIndex.toString() === chapterFilter
+                );
+            }
+            
+            if (typeFilter !== 'all') {
+                filteredWrongQuestions = filteredWrongQuestions.filter(item => 
+                    item.type === typeFilter
+                );
+            }
+            
+            if (statusFilter !== 'all') {
+                filteredWrongQuestions = filteredWrongQuestions.filter(item => 
+                    item.status === statusFilter
+                );
+            }
+            
+            if (filteredWrongQuestions.length === 0) {
+                showToast('没有找到符合筛选条件的错题', 'warning');
                 return;
             }
             
             // 收集错题对应的原始题目
             currentQuestions = [];
             
-            wrongQuestions.forEach(wrongQuestion => {
+            filteredWrongQuestions.forEach(wrongQuestion => {
                 let originalQuestion = null;
                 const chapter = questionBank[wrongQuestion.chapterIndex];
                 
@@ -4053,7 +4427,14 @@
                 return;
             }
             
-            shuffleArray(currentQuestions);
+            // 根据设置决定题目顺序
+            const practiceMode = document.getElementById('practiceMode')?.value || 'mixed';
+            if (practiceMode === 'random') {
+                shuffleArray(currentQuestions);
+            } else if (practiceMode === 'mixed') {
+                shuffleArray(currentQuestions);
+            }
+            
             currentQuestionIndex = 0;
             currentPage = 0;
             
@@ -4064,8 +4445,9 @@
             showQuestion(currentQuestionIndex);
             updatePagination();
             updatePracticeBadge();
+            
+            showToast(`开始练习筛选出的 ${currentQuestions.length} 道错题`, 'success');
         }
-
         function clearWrongQuestions() {
             if (confirm('确定要清空错题本吗？此操作不可恢复。')) {
                 wrongQuestions = [];
@@ -4078,22 +4460,32 @@
 
         // ===== 设置管理 =====
         function saveSettings() {
+            // 更新全局设置
             settings = {
                 autoCheck: document.getElementById('autoCheck').value,
                 wrongThreshold: parseInt(document.getElementById('wrongThreshold').value),
                 autoNextOnCorrect: document.getElementById('autoNextOnCorrect').value,
-                // 添加移动端设置
-                mobileVibrate: document.getElementById('mobileVibrate')?.value || 'disabled'
+                mobileVibrate: document.getElementById('mobileVibrate')?.value || 'disabled',
+                // 保存其他练习设置
+                chapters: Array.from(chapterSelect.selectedOptions).map(option => option.value),
+                includeSingle: document.getElementById('singleChoice')?.checked ?? true,
+                includeMulti: document.getElementById('multiChoice')?.checked ?? true,
+                practiceMode: document.getElementById('practiceMode')?.value || 'mixed',
+                questionsPerPage: parseInt(document.getElementById('questionsPerPage')?.value || 10)
             };
             
             localStorage.setItem('settings', JSON.stringify(settings));
             
-            // 重新加载设置到表单
-            document.getElementById('autoCheck').value = settings.autoCheck;
-            document.getElementById('wrongThreshold').value = settings.wrongThreshold;
-            document.getElementById('autoNextOnCorrect').value = settings.autoNextOnCorrect;
+            // 保存到localStorage
+            localStorage.setItem('practiceSettings', JSON.stringify({
+                chapters: settings.chapters,
+                includeSingle: settings.includeSingle,
+                includeMulti: settings.includeMulti,
+                practiceMode: settings.practiceMode,
+                questionsPerPage: settings.questionsPerPage
+            }));
             
-            // 如果正在练习，重新开始
+            // 如果正在练习页面，重新开始练习
             if (document.getElementById('practice').classList.contains('active')) {
                 startPractice();
             }
@@ -4113,6 +4505,7 @@
             }
         }
         // ===== 添加自动跳转函数 =====
+        // 修改 startAutoNextTimer 函数的开头部分：
         function startAutoNextTimer() {
             // 清除现有的计时器
             if (autoNextTimer) {
@@ -4120,18 +4513,20 @@
                 autoNextTimer = null;
             }
             
-            // 如果没有启用自动跳转，直接返回
-            if (settings.autoNextOnCorrect === 'disabled') {
-                return;
-            }
-            
             // 获取跳转延迟时间
-            const delaySeconds = parseInt(settings.autoNextOnCorrect);
+            let delaySeconds = 2; // 默认2秒
+            
+            // 优先使用 autoNextOnCorrect 设置
+            if (settings.autoNextOnCorrect !== 'disabled') {
+                delaySeconds = parseInt(settings.autoNextOnCorrect);
+            } else if (settings.autoCheck === 'auto') {
+                delaySeconds = 1; // 自动检查模式下默认1秒
+            }
             
             // 显示倒计时提示
             const feedbackTitle = document.getElementById('feedbackTitle');
             if (feedbackTitle) {
-                feedbackTitle.innerHTML = `<i class="fas fa-check-circle"></i> 回答正确！<span id="countdownTimer" style="margin-left: 10px; font-size: 0.9rem; opacity: 0.8;"></span>`;
+                feedbackTitle.innerHTML = `<i class="fas fa-check-circle"></i> 回答正确！<span id="countdownTimer"></span>`;
             }
             
             // 开始倒计时
@@ -4140,11 +4535,19 @@
             
             const updateCountdown = () => {
                 if (countdownElement) {
-                    countdownElement.textContent = `(${remaining}秒后跳转)`;
+                    countdownElement.textContent = ` (${remaining}秒后跳转)`;
                 }
                 
                 if (remaining <= 0) {
-                    showNextQuestion();
+                    // 跳转到下一题
+                    if (currentQuestionIndex < currentQuestions.length - 1) {
+                        currentQuestionIndex++;
+                        currentPage = Math.floor(currentQuestionIndex / questionsPerPage);
+                        showQuestion(currentQuestionIndex);
+                        updatePagination();
+                    } else {
+                        finishPractice();
+                    }
                     return;
                 }
                 
@@ -4375,6 +4778,34 @@
                 // 加载移动端设置
                 if (document.getElementById('mobileVibrate') && settings.mobileVibrate) {
                     document.getElementById('mobileVibrate').value = settings.mobileVibrate;
+                }
+            }
+            
+            // 练习设置
+            const savedPracticeSettings = localStorage.getItem('practiceSettings');
+            if (savedPracticeSettings) {
+                const practiceSettings = JSON.parse(savedPracticeSettings);
+                // 更新设置表单
+                if (document.getElementById('singleChoice')) {
+                    document.getElementById('singleChoice').checked = practiceSettings.includeSingle !== false;
+                }
+                if (document.getElementById('multiChoice')) {
+                    document.getElementById('multiChoice').checked = practiceSettings.includeMulti !== false;
+                }
+                if (document.getElementById('practiceMode')) {
+                    document.getElementById('practiceMode').value = practiceSettings.practiceMode || 'mixed';
+                }
+                if (document.getElementById('questionsPerPage')) {
+                    document.getElementById('questionsPerPage').value = practiceSettings.questionsPerPage || 10;
+                }
+                // 更新章节选择
+                if (practiceSettings.chapters && practiceSettings.chapters.length > 0) {
+                    const chapterSelect = document.getElementById('chapterSelect');
+                    if (chapterSelect) {
+                        Array.from(chapterSelect.options).forEach(option => {
+                            option.selected = practiceSettings.chapters.includes(option.value);
+                        });
+                    }
                 }
             }
             
