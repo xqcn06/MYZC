@@ -196,40 +196,66 @@
             display: inline-block;
             min-width: 120px;
             height: 40px;
-            border-bottom: 2px solid #4b6cb7;
+            border-bottom: none;
             margin: 0 6px;
             text-align: center;
             cursor: pointer;
             position: relative;
             vertical-align: middle;
-            padding: 8px 4px 0;
+            padding: 0;
             font-weight: 600;
             color: #2c3e50;
+            background-image: linear-gradient(to right, transparent 0%, transparent 50%, #4b6cb7 50%, #4b6cb7 100%);
+            background-position: 0 100%;
+            background-repeat: no-repeat;
+            background-size: 200% 2px;
+            transition: all 0.3s ease;
         }
-        
+
         .blank.filled {
-            border-bottom: 2px solid #2ecc71;
+            background-image: linear-gradient(to right, transparent 0%, transparent 50%, #2ecc71 50%, #2ecc71 100%);
             color: #27ae60;
         }
-        
+
         .blank.empty {
+            background-image: linear-gradient(to right, transparent 0%, transparent 50%, #e74c3c 50%, #e74c3c 100%);
             color: #e74c3c;
-            border-bottom-color: #e74c3c;
         }
-        
+
         .blank-index {
             position: absolute;
-            top: -22px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: -18px;
+            left: 2px;
             font-size: 0.8rem;
-            color: #7f8c8d;
+            color: #4b6cb7;
             font-weight: normal;
-            background-color: white;
-            padding: 0 4px;
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .blank-placeholder {
+            color: #aaa;
+            font-weight: normal;
+        }
+
+        .current-blank {
+            background-color: #e3f2fd;
+            border-radius: 4px;
+        }
+
+        .blank::before {
+            content: attr(data-index);
+            position: absolute;
+            top: -18px;
+            left: 2px;
+            font-size: 0.8rem;
+            color: #4b6cb7;
+            font-weight: normal;
+            background-color: transparent;
+            padding: 0;
             z-index: 1;
         }
-        
+
         .word-options {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -398,6 +424,116 @@
             background-color: #ffeaa7;
         }
         
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .auto-close-setting {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* 弹窗样式 - 基础 */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .popup-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            max-height: 70vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .popup-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        .popup-words {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .popup-word {
+            padding: 12px;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .popup-word:hover {
+            background-color: #e9ecef;
+        }
+        
+        .popup-word.used {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            cursor: not-allowed;
+        }
+        
+        .popup-word.selected {
+            background-color: #4b6cb7;
+            color: white;
+            border-color: #3a5ca9;
+        }
+        
+        .popup-close {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 2px solid #eaeaea;
+        }
+        
+        .popup-close-btn {
+            padding: 12px 30px;
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .popup-close-btn:hover {
+            background-color: #7f8c8d;
+        }
+        
+        /* 手机端响应式调整 */
         @media (max-width: 768px) {
             body {
                 padding: 15px;
@@ -461,7 +597,7 @@
                 padding: 6px 4px 0;
             }
             
-            .blank-index {
+            .blank::before {
                 top: -20px;
                 font-size: 0.75rem;
             }
@@ -485,204 +621,55 @@
             .word-options {
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             }
-        }
-        
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.3);
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            z-index: 1000;
-            display: none;
-        }
-        
-        .popup-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 12px 12px 0 0;
-            width: 100%;
-            max-width: 100%;
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.15);
-            max-height: 60vh;
-            overflow-y: auto;
-        }
-        
-        @media (min-width: 769px) {
+            
+            /* 手机端底部弹窗 */
             .popup-overlay {
-                display: none !important;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .popup-content {
-                max-height: 50vh;
-            }
-        }
-        
-        .popup-title {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: #2c3e50;
-            text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .popup-words {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .popup-word {
-            padding: 10px;
-            background-color: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 6px;
-            text-align: center;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
-        }
-        
-        .popup-word:hover {
-            background-color: #e9ecef;
-        }
-        
-        .popup-word.used {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-            cursor: not-allowed;
-        }
-        
-        .popup-close {
-            text-align: center;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-        }
-        
-        .popup-close-btn {
-            padding: 10px 25px;
-            background-color: #95a5a6;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        
-        .current-blank {
-            background-color: #e3f2fd;
-            border-color: #4b6cb7;
-        }
-        
-        .stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-            font-size: 0.9rem;
-            color: #7f8c8d;
-        }
-        
-        .blank-placeholder {
-            color: #aaa;
-            font-weight: normal;
-        }
-        
-        .auto-close-setting {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #eee;
-        }
-        /* 修改空白处样式 - 修复下划线重复问题 */
-        .blank {
-            display: inline-block;
-            min-width: 120px;
-            height: 40px;
-            border-bottom: none;
-            margin: 0 6px;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-            vertical-align: middle;
-            padding: 0;
-            font-weight: 600;
-            color: #2c3e50;
-            background-image: linear-gradient(to right, transparent 0%, transparent 50%, #4b6cb7 50%, #4b6cb7 100%);
-            background-position: 0 100%;
-            background-repeat: no-repeat;
-            background-size: 200% 2px;
-            transition: all 0.3s ease;
-        }
-
-        .blank.filled {
-            background-image: linear-gradient(to right, transparent 0%, transparent 50%, #2ecc71 50%, #2ecc71 100%);
-            color: #27ae60;
-        }
-
-        .blank.empty {
-            background-image: linear-gradient(to right, transparent 0%, transparent 50%, #e74c3c 50%, #e74c3c 100%);
-            color: #e74c3c;
-        }
-
-        .blank-index {
-            position: absolute;
-            top: -18px;
-            left: 2px;
-            font-size: 0.8rem;
-            color: #4b6cb7;
-            font-weight: normal;
-            background-color: transparent;
-            padding: 0;
-        }
-
-        .blank-placeholder {
-            color: #aaa;
-            font-weight: normal;
-        }
-
-        /* 当前选中的空白处 */
-        .current-blank {
-            background-color: #e3f2fd;
-            border-radius: 4px;
-        }
-
-        /* 在空白处内容前显示序号 */
-        .blank::before {
-            content: attr(data-index);
-            position: absolute;
-            top: -18px;
-            left: 2px;
-            font-size: 0.8rem;
-            color: #4b6cb7;
-            font-weight: normal;
-            background-color: transparent;
-            padding: 0;
-            z-index: 1;
-        }
-
-        /* 手机端调整 */
-        @media (max-width: 768px) {
-            .blank {
-                min-width: 90px;
-                height: 36px;
-                margin: 0 4px;
-                font-size: 0.95rem;
+                align-items: flex-end;
             }
             
-            .blank::before {
-                top: -20px;
-                font-size: 0.75rem;
+            .popup-content {
+                border-radius: 15px 15px 0 0;
+                width: 100%;
+                max-width: none;
+                max-height: 50vh;
+                padding: 20px;
+                transform: translateY(100%);
+                transition: transform 0.3s ease-out;
+            }
+            
+            .popup-overlay.show {
+                display: flex;
+            }
+            
+            .popup-content.show {
+                transform: translateY(0);
+            }
+            
+            .popup-title {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+                position: sticky;
+                top: 0;
+                background-color: white;
+                z-index: 1;
+            }
+            
+            .popup-words {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+            
+            .popup-word {
+                padding: 12px 8px;
+                font-size: 0.9rem;
+            }
+            
+            .popup-close {
+                padding-top: 15px;
+                position: sticky;
+                bottom: 0;
+                background-color: white;
             }
         }
     </style>
@@ -697,15 +684,15 @@
         <div class="main-content">
             <div class="left-panel">
                 <div class="quiz-selector">
-                    <button class="quiz-btn active" data-quiz="1">题目1: 巴黎留学</button>
-                    <button class="quiz-btn" data-quiz="2">题目2: 香格里拉</button>
-                    <button class="quiz-btn" data-quiz="3">题目3: 传统教材</button>
-                    <button class="quiz-btn" data-quiz="4">题目4: 美国移民</button>
-                    <button class="quiz-btn" data-quiz="5">题目5: 手机健康</button>
-                    <button class="quiz-btn" data-quiz="6">题目6: STEM教育</button>
+                    <button class="quiz-btn active" data-quiz="0">巴黎留学</button>
+                    <button class="quiz-btn" data-quiz="1">香格里拉</button>
+                    <button class="quiz-btn" data-quiz="2">传统教材</button>
+                    <button class="quiz-btn" data-quiz="3">美国移民</button>
+                    <button class="quiz-btn" data-quiz="4">手机健康</button>
+                    <button class="quiz-btn" data-quiz="5">STEM教育</button>
                 </div>
                 
-                <h2 id="quiz-title">题目1: 巴黎留学</h2>
+                <h2 id="quiz-title">巴黎留学</h2>
                 <div class="article-content" id="article-content">
                     <!-- 文章内容将通过JavaScript动态加载 -->
                 </div>
@@ -760,7 +747,7 @@
     
     <!-- 单词选择弹出框 (仅手机显示) -->
     <div class="popup-overlay" id="popup-overlay">
-        <div class="popup-content">
+        <div class="popup-content" id="popup-content">
             <div class="popup-title" id="popup-title">选择单词填空</div>
             <div class="popup-words" id="popup-words">
                 <!-- 弹出框单词选项将通过JavaScript动态加载 -->
@@ -775,43 +762,43 @@
         // 题库数据
         const quizzes = [
             {
-                id: 1,
-                title: "题目1: 巴黎留学",
+                id: 0,
+                title: "巴黎留学",
                 content: `Studying abroad provides a golden opportunity to experience "real" exotic cultures. Living and studying in a foreign country can ______ the way to diminishing biased misunderstandings of the host country. For example, according to the author, Paris is not just full of ______ Frenchmen and quaint passageways. If you are organized enough, the so-called "endless" ______ processes could be completed in a few days. This can provide you with the ______ of appreciating the city more closely than any tourist. The author spent five months ______ in Paris: visiting museums, running around parks, ______ bars, winding aimlessly through narrow streets, and enjoying both the ______ moments and the surprises brought by the charming city. As an international student, the author had the chance to live in Paris as a(n) ______ and feel how colorful and inclusive the French culture is. The comfort she got from the ______ Sunday market, the warmth she found while saying bonjour to passers-by, and the calm she felt in the timeless ______ would all be treasured as her unique memory of Paris.`,
                 words: ["bureaucratic", "wandering", "local", "imaginable", "cityscape", "frequenting", "luring", "pave", "ecstasy", "vibrant", "atmosphere", "dairy", "tactic", "crate", "serene"],
                 answers: ["pave", "luring", "bureaucratic", "ecstasy", "wandering", "frequenting", "serene", "local", "vibrant", "cityscape"]
             },
             {
-                id: 2,
-                title: "题目2: 香格里拉",
+                id: 1,
+                title: "香格里拉",
                 content: `To realize the dream of finding the paradise described in James Hilton's Lost Horizon, the author and her fiancé went to a town in a ______ village named Shangri-La, which ______ of mystery and enchantment. Nevertheless, the town turned out to be far from the paradise envisioned in her mind. The Gansu Monastery, which was filled with ______ monks, crowds of tourists and lacked religious ______, deeply disappointed her. However, when she was persuaded to go to the town's weekly dance and watched people dance and spin, she couldn't remain ______ for long. She joined the circle and followed the steps with ______ degrees of success, beginning to see the charm of the town. On the second day they followed three old men and their cattle, looking like Shangri-La's ______ of walking the dogs, all the way into the hills. They were able to appreciate the unusual plants along the way up the hill. When they sat down with the fresh cold air ______ their faces and filling their lungs, she felt paradise had ______ up on her. She found peace there but still had to leave, for paradise is not ______ to a single place. It is all around for you to discover and find its charm and beauty.`,
                 words: ["remote", "rings", "complexity", "confined", "version", "perception", "weaves", "irritated", "varying", "hitting", "cynical", "isolate", "vibrancy", "pulse", "crept"],
                 answers: ["remote", "rings", "irritated", "vibrancy", "cynical", "varying", "version", "hitting", "crept", "confined"]
             },
             {
-                id: 3,
-                title: "题目3: 传统教材",
+                id: 2,
+                title: "传统教材",
                 content: `Classic textbooks remain the first choice on campus despite the hype about e-books. Though the era has turned from print to "print-plus", with publishers ______ to produce digital materials, such as ______ codes and archives of works along with the distinctive onionskin-thin pages, or books with digital extras and ______, the vast majority of students still show a ______ for printed textbooks due to the comfort of print. ______ partly by students' concern over cost, and partly by the pedagogical philosophy that textbooks should be at the reading level of most students and should require some careful reading attention, many professors stick with textbooks, without making ______ online material a deciding factor in choosing a textbook. Although some publishing companies have placed bigger ______ on new kinds of digital services and have seen signs of a fast ______ from a print to a digital world, it's generally agreed that print products won't ______, but will exist side by side with digital products to ______ different demands.`,
                 words: ["preference", "enhancements", "transition", "bets", "envision", "driven", "scrambling", "accommodate", "supplemental", "distribution", "access", "vanish", "predominant", "interactive", "relatively"],
                 answers: ["scrambling", "access", "enhancements", "preference", "Driven", "supplemental", "bets", "transition", "vanish", "accommodate"]
             },
             {
-                id: 4,
-                title: "题目4: 美国移民",
+                id: 3,
+                title: "美国移民",
                 content: `The immigration issue has long been controversial in the history of America. The immigrants were claimed to be too different to ______ into the mainstream. Today, the voice of disapproval has not ______ yet. But lots of popular myths are proved wrong by ______ statistics and concrete facts. For example, immigrants do not rob jobs away nor drain the government finances; the population flow is not out of ______ and they do not cause overpopulation. Instead, the country has benefited ______ from immigration. With the efforts of immigrants, the nation's economy has become more productive and flexible, and the declining urban centers have been ______. In high-tech sectors, they developed new products with their ______ ideas, providing millions of Americans with job vacancies; in lower-skilled sectors, they take the jobs that most Americans will not take such as ______ service. What's more, the immigrants and their ______ paid more taxes than they collected in government services. Therefore, hardworking and peaceful immigrants should not be treated as ______ and blocked outside of the border.`,
                 words: ["proportion", "assimilate", "immensely", "ceased", "counterparts", "innovative", "casualty", "authoritative", "drain", "terrorists", "despite", "integral", "revitalized", "offspring", "domestic"],
                 answers: ["assimilate", "ceased", "authoritative", "proportion", "immensely", "revitalized", "innovative", "domestic", "offspring", "terrorists"]
             },
             {
-                id: 5,
-                title: "题目5: 手机健康",
+                id: 4,
+                title: "手机健康",
                 content: `What impact can mobile phones have on their users' health? Many people worry about the supposed ill '______' caused by radiation from handsets and base stations, despite the lack of credible evidence of any harm. But evidence for the beneficial effects of mobile phones on health is rather more '______'. Indeed, a systematic review carried out by Rifat Atun and his colleagues at Imperial College, London, rounds up 150 examples of the use of text-messaging in the '______' of health care. These uses fall into three categories: efficiency gains; public-health gains; and direct benefits to patients by incorporating text-messaging into treatment regimes. The study, funded by Vodafone, the world's largest mobile operator, was published this week.<br><br>Using texting to boost '______' is not rocket science, but big savings can be achieved. Several trials carried out in England have found that the use of text-messaging '______' reduces the number of missed appointments with family doctors by 26%-39%, for example, and the number of missed hospital appointments by 33%-50%. If such schemes were rolled out nationally, this would translate into annual savings of 256 million to 364 million pounds.<br><br>Text messages are also being used to remind patients about blood tests, clinics, scans, and dental '______'. Similar schemes in America, Norway and Sweden have had equally satisfying results—though the use of text-message reminders in the Netherlands, where non-attendance rates are low, at 4%, had no effect other than to annoy patients.<br><br>Text messages can also be a good way to disseminate public-health information, particularly to groups who are hard to reach by other means, such as teenagers, or in developing countries where other means of communication are '______'. Text messages have been used in India to inform people about the World Health Organization's strategy to control tuberculosis, for example, and in Kenya, Nigeria and Mali to provide information about HIV and malaria. In Iraq, text messages were used to support a campaign to '______' nearly 5 million children against polio.<br><br>Finally, there are the uses of text-messaging as part of a treatment regime. These '______' sending reminders to patients to take their medicine at the right time, or to encourage compliance with exercise regimes or efforts to stop smoking. The evidence for the effectiveness of such schemes is generally anecdotal, however, notes Dr. Rifat. More '______' research is needed—which is why his team published three papers this week looking at the use of mobile phone in health care in more detail. One of these papers, written in conjunction with Victoria Franklin and Stephen Greene of the University of Dundee, in Scotland, reports the results of a trial in which diabetic teenagers' treatment was backed up with text-messaging.`,
                 words: ["Delivery", "involve", "unavailable", "effects", "reminders", "appointments", "quantitative", "efficiency", "abundant", "vaccinate"],
                 answers: ["effects", "abundant", "Delivery", "efficiency", "reminders", "appointments", "unavailable", "vaccinate", "involve", "quantitative"]
             },
             {
-                id: 6,
-                title: "题目6: STEM教育",
+                id: 5,
+                title: "STEM教育",
                 content: `In the America of our own time, the great educational challenge has become an effort to strengthen the teaching of what is now known as the STEM (science, technology, engineering and math). There is '______' and justified concern that the United States is '______' behind much of the rest of the developed world in these essential '______'. India, China, Japan, and other regions seem to be seizing technological leadership.<br><br>At the same time, perhaps '______', the humanities—while still popular in elite colleges and universities—have experienced a significant decline. Humanistic disciplines are seriously '______', not just by the government and the foundations but by academic institutions themselves. Humanists are usually among the lowest-paid '______' members at most institutions and are often lightly regarded because they do not generate grant income and because they provide no obvious credentials for most nonacademic careers.<br><br>Undoubtedly American education should train more scientists and engineers. Much of the concern among politicians about the state of American universities today is focused on the absence of "real world" education—which means preparation for professional and scientific careers. But the idea that institutions and their students must decide between humanities and science is false. Our society could not '______' without scientific and technological knowledge. But we would be equally impoverished without humanistic knowledge as well. Science and technology teach us what we can do. Humanistic '______' helps us understand what we should do.<br><br>It is almost '______' to imagine our society without thinking of the extraordinary achievements of scientists and engineers in building our complicated '______'. But try to imagine our world as well without the remarkable works that have defined our culture and values. We have always needed, and we still need, both.`,
                 words: ["underfunded", "impossible", "survive", "inevitably", "faculty", "considerable", "world", "thinking", "falling", "disciplines"],
                 answers: ["considerable", "falling", "disciplines", "inevitably", "underfunded", "faculty", "survive", "thinking", "impossible", "world"]
@@ -819,13 +806,13 @@
         ];
 
         // 当前状态
-        let currentQuiz = 1;
+        let currentQuiz = 0;
         let userAnswers = Array(10).fill("");
         let usedWords = [];
         let currentBlankIndex = -1;
         let practiceMode = false;
         let shuffleWords = false;
-        let autoClosePopup = true; // 默认选择后自动关闭弹窗
+        let autoClosePopup = true;
 
         // DOM元素
         const articleContent = document.getElementById('article-content');
@@ -834,6 +821,7 @@
         const popupOverlay = document.getElementById('popup-overlay');
         const popupWords = document.getElementById('popup-words');
         const popupTitle = document.getElementById('popup-title');
+        const popupContent = document.getElementById('popup-content');
         const popupCloseBtn = document.getElementById('popup-close-btn');
         const resetBtn = document.getElementById('reset-btn');
         const checkBtn = document.getElementById('check-btn');
@@ -865,15 +853,12 @@
             // 更新标题
             quizTitle.textContent = quiz.title;
             
-            // 更新文章内容 - 修复：正确生成10个填空处
+            // 更新文章内容
             let contentHTML = quiz.content;
-
-            // 将文章中的下划线替换为空白处
             let blankIndex = 0;
 
-            // 处理题目5和6中的特殊下划线（带引号的）
-            if (quizId === 5 || quizId === 6) {
-                // 题目5和6有单引号包裹的下划线，需要特殊处理
+            // 处理题目4和5中的特殊下划线（带引号的）
+            if (quizId === 4 || quizId === 5) {
                 contentHTML = contentHTML.replace(/'______'/g, () => {
                     if (blankIndex < 10) {
                         const blankId = `blank-${blankIndex}`;
@@ -912,8 +897,6 @@
 
             articleContent.innerHTML = `<div class="question-text">${contentHTML}</div>`;
                         
-                        
-            
             // 加载单词选项
             loadWordOptions(quiz.words);
             
@@ -937,9 +920,9 @@
                 blank.addEventListener('click', handleBlankClick);
                 
                 // 如果有已填写的答案，更新显示
-                const index = parseInt(blank.dataset.index);
+                const index = parseInt(blank.dataset.index) - 1;
                 if (userAnswers[index]) {
-                    blank.innerHTML = `<span class="blank-index">${index+1}</span>${userAnswers[index]}`;
+                    blank.innerHTML = userAnswers[index];
                     blank.classList.add('filled');
                 }
             });
@@ -986,7 +969,7 @@
         // 处理空白处点击
         function handleBlankClick(e) {
             const blank = e.currentTarget;
-            const index = parseInt(blank.dataset.index);
+            const index = parseInt(blank.dataset.index) - 1;
             currentBlankIndex = index;
             
             // 高亮当前空白处
@@ -999,7 +982,7 @@
             }
         }
 
-        // 显示单词选择弹出框
+        // 显示单词弹窗
         function showWordPopup() {
             // 更新弹出框标题
             popupTitle.textContent = `选择单词填空 (第${currentBlankIndex + 1}题)`;
@@ -1014,12 +997,21 @@
                     wordEl.classList.remove('used');
                     wordEl.title = "";
                 }
+                
+                // 如果当前空白处已经选择了这个单词，添加选中状态
+                if (userAnswers[currentBlankIndex] === word) {
+                    wordEl.classList.add('selected');
+                } else {
+                    wordEl.classList.remove('selected');
+                }
             });
             
-            popupOverlay.style.display = 'flex';
+            // 显示弹窗
+            popupOverlay.classList.add('show');
+            popupContent.classList.add('show');
         }
 
-        // 处理弹出框单词点击
+        // 处理弹窗单词点击
         function handlePopupWordClick(word) {
             // 如果单词已被其他空使用，则不允许再次选择
             if (usedWords.includes(word) && userAnswers[currentBlankIndex] !== word) {
@@ -1031,8 +1023,22 @@
             
             // 如果设置了自动关闭弹窗，则关闭
             if (autoClosePopup) {
-                popupOverlay.style.display = 'none';
+                closeWordPopup();
+            } else {
+                // 如果不自动关闭，更新弹窗状态
+                setTimeout(() => {
+                    showWordPopup();
+                }, 100);
             }
+        }
+
+        // 关闭单词弹窗
+        function closeWordPopup() {
+            popupContent.classList.remove('show');
+            
+            setTimeout(() => {
+                popupOverlay.classList.remove('show');
+            }, 300);
         }
 
         // 处理右侧单词选项点击
@@ -1050,6 +1056,11 @@
             }
             
             setWordToBlank(word);
+            
+            // 在电脑端，自动选中下一个空白处
+            if (window.innerWidth > 768) {
+                selectNextBlank();
+            }
         }
 
         // 设置单词到空白处
@@ -1089,6 +1100,31 @@
             }
         }
 
+        // 选择下一个空白处
+        function selectNextBlank() {
+            // 找到下一个未填写的空白处
+            let nextIndex = -1;
+            for (let i = 0; i < 10; i++) {
+                if (userAnswers[i] === "") {
+                    nextIndex = i;
+                    break;
+                }
+            }
+            
+            // 如果找到了下一个空白处，选中它
+            if (nextIndex !== -1) {
+                currentBlankIndex = nextIndex;
+                const blank = document.getElementById(`blank-${currentBlankIndex}`);
+                
+                // 高亮当前空白处
+                document.querySelectorAll('.blank').forEach(b => b.classList.remove('current-blank'));
+                blank.classList.add('current-blank');
+                
+                // 滚动到当前空白处附近
+                blank.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
         // 更新已用单词状态
         function updateUsedWords() {
             // 更新右侧单词选项
@@ -1101,6 +1137,13 @@
                     option.classList.remove('used');
                     option.title = "";
                 }
+                
+                // 如果当前空白处已经选择了这个单词，添加选中状态
+                if (userAnswers[currentBlankIndex] === word) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
             });
             
             // 更新弹出框单词选项
@@ -1112,6 +1155,13 @@
                 } else {
                     option.classList.remove('used');
                     option.title = "";
+                }
+                
+                // 如果当前空白处已经选择了这个单词，添加选中状态
+                if (userAnswers[currentBlankIndex] === word) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
                 }
             });
         }
@@ -1127,11 +1177,9 @@
             
             if (userAnswer === correctAnswer) {
                 blank.style.color = "#27ae60";
-                blank.style.borderBottomColor = "#27ae60";
                 blank.classList.remove('empty');
             } else {
                 blank.style.color = "#e74c3c";
-                blank.style.borderBottomColor = "#e74c3c";
                 blank.classList.add('empty');
                 
                 // 显示正确答案提示
@@ -1157,12 +1205,10 @@
                 
                 if (userAnswer === correctAnswer) {
                     blank.style.color = "#27ae60";
-                    blank.style.borderBottomColor = "#27ae60";
                     blank.classList.remove('empty');
                     correctCount++;
                 } else {
                     blank.style.color = "#e74c3c";
-                    blank.style.borderBottomColor = "#e74c3c";
                     blank.classList.add('empty');
                     incorrectIndices.push(i);
                 }
@@ -1253,15 +1299,18 @@
             checkBtn.addEventListener('click', checkAllAnswers);
             
             // 弹出框关闭按钮点击事件
-            popupCloseBtn.addEventListener('click', () => {
-                popupOverlay.style.display = 'none';
-            });
+            popupCloseBtn.addEventListener('click', closeWordPopup);
             
             // 点击弹出框外部关闭
             popupOverlay.addEventListener('click', (e) => {
                 if (e.target === popupOverlay) {
-                    popupOverlay.style.display = 'none';
+                    closeWordPopup();
                 }
+            });
+            
+            // 阻止弹窗内容内部的点击事件冒泡到遮罩层
+            popupContent.addEventListener('click', (e) => {
+                e.stopPropagation();
             });
             
             // 设置选项变化事件
@@ -1281,13 +1330,15 @@
             // 窗口大小变化时，如果是大屏幕，隐藏弹窗
             window.addEventListener('resize', () => {
                 if (window.innerWidth > 768) {
-                    popupOverlay.style.display = 'none';
+                    closeWordPopup();
                 }
             });
         }
 
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', init);
+        // 在页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+        });
     </script>
 </body>
 </html>
