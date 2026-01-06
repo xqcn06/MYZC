@@ -734,6 +734,8 @@
             display: none;
             position: relative;
             overflow: hidden;
+            background: transparent !important; /* 添加透明背景 */
+            border: none !important; /* 移除边框 */
         }
 
         .feedback-card.show {
@@ -742,6 +744,7 @@
         }
 
         .feedback-card.correct {
+            background: transparent !important; /* 透明背景 */
             background: linear-gradient(135deg, rgba(39, 174, 96, 0.08), rgba(39, 174, 96, 0.12));
             border: 2px solid var(--success);
             border-left: 5px solid var(--success);
@@ -793,6 +796,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            padding: 0; /* 移除内边距 */
         }
 
         .feedback-icon {
@@ -2000,6 +2004,52 @@
             visibility: visible;
             margin-left: 8px;
         }
+        .feedback-card.correct .feedback-text h3,
+        .feedback-card.incorrect .feedback-text h3 {
+            font-size: 0.9rem; /* 缩小字体 */
+            margin: 0; /* 移除外边距 */
+        }
+
+        .feedback-card.correct .feedback-text h3 {
+            color: var(--success); /* 绿色文字 */
+        }
+
+        .feedback-card.incorrect .feedback-text h3 {
+            color: var(--danger); /* 红色文字 */
+        }
+
+        .correct-answer {
+            font-weight: 600;
+            color: var(--success);
+            background: rgba(39, 174, 96, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-left: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* 添加答题反馈动画 */
+        @keyframes pulseCorrect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes pulseIncorrect {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .feedback-card.correct.show {
+            animation: fadeIn 0.3s ease, pulseCorrect 0.5s ease 0.3s;
+        }
+
+        .feedback-card.incorrect.show {
+            animation: fadeIn 0.3s ease, pulseIncorrect 0.5s ease 0.3s;
+        }
     </style>
 </head>
 <body>
@@ -2007,7 +2057,7 @@
     <div class="modal-overlay welcome-modal" id="welcomeModal">
         <div class="modal">
             <div class="modal-header">
-                <h2>马原题库自测系统</h2>
+                <h2>考试自测系统</h2>
                 <button class="close-modal" id="closeWelcomeModal">
                     <i class="fas fa-times"></i>
                 </button>
@@ -2087,7 +2137,16 @@
                         </select>
                         <small class="text-muted">按住Ctrl键多选</small>
                     </div>
-                    
+                    <div class="form-group">
+                        <label for="shuffleOptions">
+                            <i class="fas fa-random"></i> 选项顺序
+                        </label>
+                        <select id="shuffleOptions">
+                            <option value="original">保持原顺序</option>
+                            <option value="shuffled">打乱选项顺序</option>
+                        </select>
+                        <small class="text-muted">设置选项的显示顺序</small>
+                    </div>                    
                     <div class="form-group">
                         <label>
                             <i class="fas fa-list-check"></i> 题型选择
@@ -2185,7 +2244,20 @@
             <div class="modal-body">
                 <div class="changelog-content">
                     <div class="changelog-version">
-                        <h3><i class="fas fa-star text-warning"></i> v2.1.16 (当前版本)</h3>
+                        <h3><i class="fas fa-star text-warning"></i> v2.2.0 (当前版本)</h3>
+                        <div class="changelog-date">发布日期: 2026-01-06</div>
+                        
+                        <div class="changelog-section">
+                            <h4><i class="fas fa-plus-circle text-success"></i> 更新</h4>
+                            <ul>
+                                <li><strong>功能迭代</strong></li>
+                                <li><strong>修复已知问题</strong></li>
+                                <li><strong>优化用户提示</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="changelog-version">
+                        <h3><i class="fas fa-star text-warning"></i> v2.1.16 </h3>
                         <div class="changelog-date">发布日期: 2026-01-03</div>
                         
                         <div class="changelog-section">
@@ -2326,15 +2398,15 @@
                     <a href="#" class="sidebar-link" data-tab="dataManagement">
                         <i class="fas fa-database"></i> <span class="link-text">数据管理</span>
                     </a>
-                    <a href="马原题目查看器.html" class="sidebar-link" target="_blank">
-                        <i class="fas fa-eye"></i> <span class="link-text">题目查看器</span>
-                    </a>
+                    <a href="v3.html" class="sidebar-link" target="_blank">
+                        <i class="fas fa-language"></i> <span class="link-text">15选10训练</span>
+                    </a>    
                     <a href="#" class="sidebar-link" id="showTutorialSidebar">
                         <i class="fas fa-question-circle"></i> <span class="link-text">使用教程</span>
                     </a>
                     <a href="#" class="sidebar-link" id="showChangelogBtn">
                         <i class="fas fa-code-branch"></i> <span class="link-text">版本更新</span>
-                        <span class="badge" style="background: var(--success);">v2.1.1</span>
+                        <span class="badge" style="background: var(--success);">v2.2.0</span>
                     </a>
                 </div>
             </div>
@@ -2755,8 +2827,8 @@
                             <i class="fas fa-book"></i>
                         </div>
                         <div class="logo-text">
-                            <h1>马原题库自测系统</h1>
-                            <p style="color: rgba(255, 255, 255, 0.7);">马克思主义原理学习助手</p>
+                            <h1>考试自测系统</h1>
+                            <p style="color: rgba(255, 255, 255, 0.7);">考试学习助手</p>
                         </div>
                     </div>
                     <p style="color: rgba(255, 255, 255, 0.5); margin-top: 12px; max-width: 300px; font-size: 0.9rem;">
@@ -2779,7 +2851,7 @@
                         <h4>帮助</h4>
                         <ul>
                             <li><a href="#" id="showTutorialFooter"><i class="fas fa-question-circle"></i> 使用教程</a></li>
-                            <li><a href="马原题目查看器.html" target="_blank"><i class="fas fa-eye"></i> 题目查看器</a></li>
+                            <li><a href="v3.html" target="_blank"><i class="fas fa-language"></i> 15选10训练</a></li>
                             <li><a href="#" class="footer-tab-link" data-tab="dataManagement"><i class="fas fa-database"></i> 数据管理</a></li>
                         </ul>
                     </div>
@@ -2787,7 +2859,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2026 XJQ版权所有 v2.1.16 仅供学习使用.</p>
+                <p>&copy; 2026 XJQ版权所有 v2.2.0 仅供学习使用.</p>
                 <p style="margin-top: 4px; font-size: 0.8rem;">数据存储在浏览器本地，请勿清除浏览器数据</p>
                 <i class="fas fa-sync-alt"></i> 检查更新
             </div>
@@ -2802,6 +2874,7 @@
         let currentPage = 0;
         let questionsPerPage = 10;
         let wrongQuestions = [];
+        let shuffleOptions = 'original'; // 默认保持原顺序
         let userAnswers = {};
         let importDataFile = null;
         let autoNextTimer = null; // 添加这行
@@ -3360,8 +3433,9 @@
         // 首次访问时显示更新说明
         function checkFirstVisitWithNewVersion() {
             const lastVersion = localStorage.getItem('lastVersionSeen');
-            const currentVersion = '2.1.1';
+            const currentVersion = '2.2.0';
             
+            // 检查是否是第一次访问当前版本
             if (!lastVersion || lastVersion !== currentVersion) {
                 setTimeout(() => {
                     showModal(changelogModal);
@@ -3514,6 +3588,8 @@
             const practiceMode = document.getElementById('practiceMode')?.value || 'mixed';
             questionsPerPage = parseInt(document.getElementById('questionsPerPage')?.value || 10);
             
+            // 获取选项顺序设置
+            shuffleOptions = document.getElementById('shuffleOptions')?.value || 'original';
             // 检查题库
             if (questionBank.length === 0) {
                 showToast('请先导入题库', 'warning');
@@ -3597,8 +3673,6 @@
         // ===== 修改 showQuestion 函数，清除残留选项状态 =====
         // ===== 修改 showQuestion 函数，清除选项状态 =====
         function showQuestion(index) {
-
-            
             const question = currentQuestions[index];
             const questionId = getQuestionId(question);
             
@@ -3620,32 +3694,46 @@
             // 清空选项容器
             optionsContainer.innerHTML = '';
             
-            // 添加选项
+            // 获取选项并处理顺序
+            let optionKeys = Object.keys(question.options);
             const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
-            let letterIndex = 0;
             
-            for (const key in question.options) {
-                if (question.options.hasOwnProperty(key)) {
-                    const option = document.createElement('div');
-                    option.className = 'option';
-                    option.dataset.value = key;
-                    
-                    const optionIndex = document.createElement('div');
-                    optionIndex.className = 'option-index';
-                    optionIndex.textContent = letters[letterIndex];
-                    
-                    const optionText = document.createElement('div');
-                    optionText.textContent = `${key}. ${question.options[key]}`;
-                    
-                    option.appendChild(optionIndex);
-                    option.appendChild(optionText);
-                    
-                    option.addEventListener('click', () => selectOption(option, question.type));
-                    
-                    optionsContainer.appendChild(option);
-                    letterIndex++;
+            // 如果设置为打乱顺序，则打乱选项
+            if (shuffleOptions === 'shuffled') {
+                // 创建一个包含键值对的数组以便打乱
+                let optionEntries = Object.entries(question.options);
+                
+                // 打乱数组（使用Fisher-Yates算法）
+                for (let i = optionEntries.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionEntries[i], optionEntries[j]] = [optionEntries[j], optionEntries[i]];
                 }
+                
+                // 重新构建optionKeys数组（使用打乱后的顺序）
+                optionKeys = optionEntries.map(entry => entry[0]);
             }
+            
+            // 添加选项
+            optionKeys.forEach((key, index) => {
+                const option = document.createElement('div');
+                option.className = 'option';
+                option.dataset.value = key; // 保存原始选项键（如'A', 'B'等）
+                option.dataset.originalKey = key; // 保存原始键，用于答案对比
+                
+                const optionIndex = document.createElement('div');
+                optionIndex.className = 'option-index';
+                optionIndex.textContent = letters[index]; // 显示为A, B, C...
+                
+                const optionText = document.createElement('div');
+                optionText.textContent = `${letters[index]}. ${question.options[key]}`;
+                
+                option.appendChild(optionIndex);
+                option.appendChild(optionText);
+                
+                option.addEventListener('click', () => selectOption(option, question.type));
+                
+                optionsContainer.appendChild(option);
+            });
             
             // 检查是否已选择答案
             if (userAnswers[questionId]) {
@@ -3653,7 +3741,8 @@
                 
                 // 标记已选择的选项
                 document.querySelectorAll('.option').forEach(option => {
-                    const optionValue = option.dataset.value;
+                    const optionValue = option.dataset.originalKey; // 使用原始键进行对比
+                    
                     if (selectedOptions.includes(optionValue)) {
                         option.classList.add('selected');
                         
@@ -3702,8 +3791,10 @@
                     feedbackTitle.innerHTML = feedbackTitle.innerHTML.replace(/<span id="countdownTimer">.*<\/span>/, '');
                 }
             }
+            
             // 清除自动跳转计时器
             cancelAutoNextTimer();
+            
             // 滚动到顶部
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -3804,11 +3895,12 @@
 
         // ===== 修改selectOption函数，确保手动选择答案时也能触发自动跳转 =====
         // ===== 修改 selectOption 函数 =====
+        // 修改selectOption函数中的自动检查部分
         function selectOption(optionElement, questionType) {
             const question = currentQuestions[currentQuestionIndex];
             const questionId = getQuestionId(question);
             
-            const optionValue = optionElement.dataset.value;
+            const optionValue = optionElement.dataset.originalKey; // 使用原始键
             
             if (!userAnswers[questionId]) {
                 userAnswers[questionId] = {
@@ -3828,7 +3920,7 @@
                 optionElement.classList.add('selected');
                 userAnswers[questionId].selected = [optionValue];
                 
-                // 如果启用了自动检查，自动检查答案
+                // 如果启用了自动检查，自动检查答案（这会触发自动跳转）
                 if (settings.autoCheck === 'auto') {
                     setTimeout(() => {
                         checkAnswer(question);
@@ -3852,10 +3944,9 @@
         }
 
 
-
         // ===== 修改checkAnswer函数，添加自动跳转逻辑 =====
         // ===== 修改 checkAnswer 函数 =====
-        // 修改 checkAnswer 函数中的错题收录部分
+        // ===== 修改checkAnswer函数，添加自动跳转逻辑 =====
         function checkAnswer(question) {
             const questionId = getQuestionId(question);
             
@@ -3865,7 +3956,7 @@
             }
             
             const correctAnswers = getCorrectAnswers(question);
-            const userSelected = userAnswers[questionId].selected.sort(); // 对用户选择进行排序
+            const userSelected = userAnswers[questionId].selected.sort();
             
             // 严格比较答案（多选题需要完全匹配）
             const isCorrect = JSON.stringify(userSelected) === JSON.stringify(correctAnswers);
@@ -3923,12 +4014,33 @@
                     updateWrongQuestionsList();
                     updateWrongBadge();
                 }
+                
+                // ===== 答对后立即自动跳转（无论手动还是自动检查） =====
+                if (currentQuestionIndex < currentQuestions.length - 1) {
+                    // 随机选择0.1-0.4秒之间的延迟
+                    const delay = Math.random() * (0.4 - 0.1) + 0.1;
+                    
+                    setTimeout(() => {
+                        cancelAutoNextTimer(); // 清除可能存在的计时器
+                        currentQuestionIndex++;
+                        currentPage = Math.floor(currentQuestionIndex / questionsPerPage);
+                        showQuestion(currentQuestionIndex);
+                        updatePagination();
+                    }, delay * 1000);
+                } else {
+                    // 如果是最后一题，延迟后完成练习
+                    const delay = Math.random() * (0.4 - 0.1) + 0.1;
+                    
+                    setTimeout(() => {
+                        finishPractice();
+                    }, delay * 1000);
+                }
             }
             
             // 保存答案
             saveUserAnswers();
         }
-        // ===== 修改 showFeedback 函数，添加错题提醒 =====
+        // ===== 修改showFeedback函数，简化反馈显示 =====
         function showFeedback(question, userSelected) {
             const correctAnswers = getCorrectAnswers(question);
             const isCorrect = JSON.stringify(userSelected.sort()) === JSON.stringify(correctAnswers.sort());
@@ -3944,20 +4056,41 @@
             feedback.className = 'feedback-card';
             
             if (isCorrect) {
-                feedback.classList.add('correct', 'show');
-                feedbackIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
-                feedbackTitle.textContent = '回答正确！';
-                feedbackText.textContent = '恭喜您，回答正确！';
-                feedbackMessage.style.display = 'block';
+
+
+                feedbackMessage.style.display = 'none'; // 隐藏详细信息
                 correctAnswerText.textContent = '';
             } else {
-                feedback.classList.add('incorrect', 'show');
-                feedbackIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
-                feedbackTitle.textContent = '回答错误';
-                feedbackText.textContent = '正确答案是：';
-                feedbackMessage.style.display = 'block';
-                correctAnswerText.textContent = correctAnswers.join(', ');
+
+                feedbackMessage.style.display = 'none'; // 隐藏详细信息
+                correctAnswerText.textContent = '';
                 
+                // 只在需要时显示正确答案
+                if (settings.autoCheck === 'manual') {
+                    feedbackMessage.style.display = 'block';
+                    feedbackText.textContent = '正确答案是：';
+                    
+                    // 根据是否打乱选项，显示正确的选项字母
+                    if (shuffleOptions === 'shuffled') {
+                        // 需要将原始正确选项映射到当前显示的选项字母
+                        const optionElements = document.querySelectorAll('.option');
+                        const correctLetters = [];
+                        
+                        correctAnswers.forEach(correctKey => {
+                            optionElements.forEach(option => {
+                                if (option.dataset.originalKey === correctKey) {
+                                    // 获取显示的字母（如A, B, C...）
+                                    const displayLetter = option.querySelector('.option-index').textContent;
+                                    correctLetters.push(displayLetter);
+                                }
+                            });
+                        });
+                        
+                        correctAnswerText.textContent = correctLetters.sort().join(', ');
+                    } else {
+                        correctAnswerText.textContent = correctAnswers.join(', ');
+                    }
+                }
             }
             
             // 保存答案状态
@@ -3967,6 +4100,7 @@
                 userAnswers[questionId].checked = true;
             }
         }
+
 
         // ===== 导航功能 =====
         function showPreviousQuestion() {
@@ -4008,18 +4142,33 @@
             
             // 如果没有检查答案，则检查答案
             if (!userAnswers[questionId] || !userAnswers[questionId].checked) {
-                checkAnswer(question);
+                checkAnswer(question); // 这个函数现在包含自动跳转逻辑
             } else {
                 // 如果已经检查过答案，则直接显示反馈
                 showFeedback(question, userAnswers[questionId].selected);
-            }
-            
-            // 如果启用了自动跳转，启动计时器（即使已经检查过答案）
-            if (settings.autoNextOnCorrect !== 'disabled') {
-                startAutoNextTimer();
-            } else if (settings.autoCheck === 'auto') {
-                // 如果设置了自动检查模式，也启动计时器
-                startAutoNextTimer();
+                
+                // 如果已经答对，也触发自动跳转
+                if (userAnswers[questionId].correct) {
+                    if (currentQuestionIndex < currentQuestions.length - 1) {
+                        // 随机选择0.1-0.4秒之间的延迟
+                        const delay = Math.random() * (0.4 - 0.1) + 0.1;
+                        
+                        setTimeout(() => {
+                            cancelAutoNextTimer(); // 清除可能存在的计时器
+                            currentQuestionIndex++;
+                            currentPage = Math.floor(currentQuestionIndex / questionsPerPage);
+                            showQuestion(currentQuestionIndex);
+                            updatePagination();
+                        }, delay * 1000);
+                    } else {
+                        // 如果是最后一题，延迟后完成练习
+                        const delay = Math.random() * (0.4 - 0.1) + 0.1;
+                        
+                        setTimeout(() => {
+                            finishPractice();
+                        }, delay * 1000);
+                    }
+                }
             }
         }
 
@@ -4616,11 +4765,14 @@
                 autoCheck: document.getElementById('autoCheck').value,
                 wrongThreshold: parseInt(document.getElementById('wrongThreshold').value),
                 autoNextOnCorrect: document.getElementById('autoNextOnCorrect').value,
+                shuffleOptions: document.getElementById('shuffleOptions').value, // 添加这行
                 mobileVibrate: document.getElementById('mobileVibrate')?.value || 'disabled'
             };
             
-            localStorage.setItem('settings', JSON.stringify(settings));
+            // 更新全局变量
+            shuffleOptions = settings.shuffleOptions;
             
+            localStorage.setItem('settings', JSON.stringify(settings));
             // 保存练习设置到独立的键
             const practiceSettings = {
                 chapters: Array.from(chapterSelect.selectedOptions).map(option => option.value),
@@ -4650,12 +4802,13 @@
             }
         }
 
-        // ===== 修改resetSettings函数 =====
+        // ===== 在resetSettings函数中重置选项顺序设置 =====
         function resetSettings() {
             if (confirm('确定要恢复默认设置吗？')) {
                 document.getElementById('autoCheck').value = 'manual';
                 document.getElementById('wrongThreshold').value = '3';
-                document.getElementById('autoNextOnCorrect').value = 'disabled'; // 添加这行
+                document.getElementById('autoNextOnCorrect').value = 'disabled';
+                document.getElementById('shuffleOptions').value = 'original'; // 添加这行
                 
                 showToast('设置已恢复默认', 'success');
             }
@@ -4930,8 +5083,10 @@
                 if (document.getElementById('wrongThreshold')) {
                     document.getElementById('wrongThreshold').value = settings.wrongThreshold || 3;
                 }
+                // 不需要autoNextOnCorrect设置了，因为现在无论手动还是自动都自动跳转
                 if (document.getElementById('autoNextOnCorrect')) {
-                    document.getElementById('autoNextOnCorrect').value = settings.autoNextOnCorrect || 'disabled';
+                    // 可以隐藏或禁用这个设置，因为现在总是自动跳转
+                    document.getElementById('autoNextOnCorrect').style.display = 'none';
                 }
                 // 加载移动端设置
                 if (document.getElementById('mobileVibrate') && settings.mobileVibrate) {
@@ -4942,10 +5097,11 @@
                 settings = {
                     autoCheck: 'manual',
                     wrongThreshold: 3,
-                    autoNextOnCorrect: 'disabled',
+                    shuffleOptions: 'original',
                     mobileVibrate: 'disabled'
                 };
             }
+            
             
             // 练习设置
             const savedPracticeSettings = localStorage.getItem('practiceSettings');

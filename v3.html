@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15选10英语练习</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #4b6cb7, #182848);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        h1 i {
+            font-size: 2.2rem;
+            color: #ffd166;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: row;
+            gap: 25px;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+        
+        .left-panel {
+            flex: 3;
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            min-width: 300px;
+        }
+        
+        .controls {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+        
+        .word-bank {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+        
+        .quiz-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .quiz-selector::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .quiz-selector::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        .quiz-selector::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        
+        .quiz-btn {
+            padding: 10px 16px;
+            background-color: #eef2ff;
+            border: 2px solid #d1d9ff;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+        
+        .quiz-btn:hover {
+            background-color: #dbe4ff;
+            transform: translateY(-2px);
+        }
+        
+        .quiz-btn.active {
+            background-color: #4b6cb7;
+            color: white;
+            border-color: #3a5ca9;
+        }
+        
+        .article-content {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 65vh;
+            padding-right: 15px;
+        }
+        
+        .article-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .article-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .article-content::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        .article-content::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 25px 0 15px;
+            color: #4b6cb7;
+        }
+        
+        .question-text {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .blank {
+            display: inline-block;
+            min-width: 120px;
+            height: 40px;
+            border-bottom: 2px solid #4b6cb7;
+            margin: 0 6px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            vertical-align: middle;
+            padding: 8px 4px 0;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .blank.filled {
+            border-bottom: 2px solid #2ecc71;
+            color: #27ae60;
+        }
+        
+        .blank.empty {
+            color: #e74c3c;
+            border-bottom-color: #e74c3c;
+        }
+        
+        .blank-index {
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            font-weight: normal;
+            background-color: white;
+            padding: 0 4px;
+            z-index: 1;
+        }
+        
+        .word-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .word-option {
+            padding: 14px;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        
+        .word-option:hover {
+            background-color: #e9ecef;
+            transform: translateY(-3px);
+        }
+        
+        .word-option.used {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            cursor: not-allowed;
+        }
+        
+        .word-option.selected {
+            background-color: #4b6cb7;
+            color: white;
+            border-color: #3a5ca9;
+        }
+        
+        .settings {
+            margin-bottom: 20px;
+        }
+        
+        .setting-item {
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .setting-item label {
+            margin-left: 10px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex: 1;
+        }
+        
+        .btn-primary {
+            background-color: #4b6cb7;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a5ca9;
+            transform: translateY(-3px);
+        }
+        
+        .btn-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+            transform: translateY(-3px);
+        }
+        
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+            transform: translateY(-3px);
+        }
+        
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result.correct {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .result.incorrect {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .score {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .correct-answer {
+            margin-top: 15px;
+            font-weight: 600;
+        }
+        
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .word-item {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .word-item.correct {
+            background-color: #c3e6cb;
+        }
+        
+        .word-item.incorrect {
+            background-color: #f5c6cb;
+        }
+        
+        .word-item.missing {
+            background-color: #ffeaa7;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                padding: 20px;
+            }
+            
+            .right-panel {
+                min-width: auto;
+            }
+            
+            .quiz-selector {
+                margin-bottom: 20px;
+                padding-bottom: 8px;
+            }
+            
+            .quiz-btn {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+            
+            .question-text {
+                font-size: 1rem;
+                line-height: 1.7;
+                margin-bottom: 15px;
+                max-height: none;
+                overflow-y: visible;
+                padding-right: 0;
+            }
+            
+            .article-content {
+                max-height: none;
+                overflow-y: visible;
+                padding-right: 0;
+            }
+            
+            .blank {
+                min-width: 90px;
+                height: 36px;
+                margin: 0 4px;
+                font-size: 0.95rem;
+                padding: 6px 4px 0;
+            }
+            
+            .blank-index {
+                top: -20px;
+                font-size: 0.75rem;
+            }
+            
+            .word-bank {
+                display: none;
+            }
+            
+            .controls {
+                padding: 20px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+            }
+            
+            .word-options {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+        
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            width: 100%;
+            max-width: 100%;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.15);
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        @media (min-width: 769px) {
+            .popup-overlay {
+                display: none !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .popup-content {
+                max-height: 50vh;
+            }
+        }
+        
+        .popup-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .popup-words {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .popup-word {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        
+        .popup-word:hover {
+            background-color: #e9ecef;
+        }
+        
+        .popup-word.used {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            cursor: not-allowed;
+        }
+        
+        .popup-close {
+            text-align: center;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .popup-close-btn {
+            padding: 10px 25px;
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .current-blank {
+            background-color: #e3f2fd;
+            border-color: #4b6cb7;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .blank-placeholder {
+            color: #aaa;
+            font-weight: normal;
+        }
+        
+        .auto-close-setting {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        /* 修改空白处样式 - 修复下划线重复问题 */
+        .blank {
+            display: inline-block;
+            min-width: 120px;
+            height: 40px;
+            border-bottom: none;
+            margin: 0 6px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            vertical-align: middle;
+            padding: 0;
+            font-weight: 600;
+            color: #2c3e50;
+            background-image: linear-gradient(to right, transparent 0%, transparent 50%, #4b6cb7 50%, #4b6cb7 100%);
+            background-position: 0 100%;
+            background-repeat: no-repeat;
+            background-size: 200% 2px;
+            transition: all 0.3s ease;
+        }
+
+        .blank.filled {
+            background-image: linear-gradient(to right, transparent 0%, transparent 50%, #2ecc71 50%, #2ecc71 100%);
+            color: #27ae60;
+        }
+
+        .blank.empty {
+            background-image: linear-gradient(to right, transparent 0%, transparent 50%, #e74c3c 50%, #e74c3c 100%);
+            color: #e74c3c;
+        }
+
+        .blank-index {
+            position: absolute;
+            top: -18px;
+            left: 2px;
+            font-size: 0.8rem;
+            color: #4b6cb7;
+            font-weight: normal;
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .blank-placeholder {
+            color: #aaa;
+            font-weight: normal;
+        }
+
+        /* 当前选中的空白处 */
+        .current-blank {
+            background-color: #e3f2fd;
+            border-radius: 4px;
+        }
+
+        /* 在空白处内容前显示序号 */
+        .blank::before {
+            content: attr(data-index);
+            position: absolute;
+            top: -18px;
+            left: 2px;
+            font-size: 0.8rem;
+            color: #4b6cb7;
+            font-weight: normal;
+            background-color: transparent;
+            padding: 0;
+            z-index: 1;
+        }
+
+        /* 手机端调整 */
+        @media (max-width: 768px) {
+            .blank {
+                min-width: 90px;
+                height: 36px;
+                margin: 0 4px;
+                font-size: 0.95rem;
+            }
+            
+            .blank::before {
+                top: -20px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-language"></i> 15选10英语练习</h1>
+            <p class="subtitle">点击文章中的空白处，从右侧单词库中选择合适的单词填空。完成后可以检查答案，提高你的英语词汇和阅读理解能力。</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="quiz-selector">
+                    <button class="quiz-btn active" data-quiz="1">题目1: 巴黎留学</button>
+                    <button class="quiz-btn" data-quiz="2">题目2: 香格里拉</button>
+                    <button class="quiz-btn" data-quiz="3">题目3: 传统教材</button>
+                    <button class="quiz-btn" data-quiz="4">题目4: 美国移民</button>
+                    <button class="quiz-btn" data-quiz="5">题目5: 手机健康</button>
+                    <button class="quiz-btn" data-quiz="6">题目6: STEM教育</button>
+                </div>
+                
+                <h2 id="quiz-title">题目1: 巴黎留学</h2>
+                <div class="article-content" id="article-content">
+                    <!-- 文章内容将通过JavaScript动态加载 -->
+                </div>
+                
+                <div class="stats">
+                    <div>已填: <span id="filled-count">0</span>/10</div>
+                    <div>剩余单词: <span id="remaining-count">15</span></div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="controls">
+                    <h3><i class="fas fa-cog"></i> 设置</h3>
+                    <div class="settings">
+                        <div class="setting-item">
+                            <input type="checkbox" id="shuffle-words" class="checkbox">
+                            <label for="shuffle-words">打乱单词顺序</label>
+                        </div>
+                        <div class="setting-item">
+                            <input type="checkbox" id="practice-mode" class="checkbox">
+                            <label for="practice-mode">背诵模式 (逐题检查答案)</label>
+                        </div>
+                        <div class="setting-item auto-close-setting">
+                            <input type="checkbox" id="auto-close-popup" class="checkbox" checked>
+                            <label for="auto-close-popup">选择后自动关闭弹窗 (仅手机)</label>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" id="reset-btn">
+                            <i class="fas fa-redo"></i> 重置当前题目
+                        </button>
+                        <button class="btn btn-success" id="check-btn">
+                            <i class="fas fa-check-circle"></i> 检查答案
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="word-bank">
+                    <h3><i class="fas fa-book"></i> 单词银行</h3>
+                    <div class="word-options" id="word-options">
+                        <!-- 单词选项将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                
+                <div class="result" id="result-container">
+                    <!-- 结果将通过JavaScript动态加载 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 单词选择弹出框 (仅手机显示) -->
+    <div class="popup-overlay" id="popup-overlay">
+        <div class="popup-content">
+            <div class="popup-title" id="popup-title">选择单词填空</div>
+            <div class="popup-words" id="popup-words">
+                <!-- 弹出框单词选项将通过JavaScript动态加载 -->
+            </div>
+            <div class="popup-close">
+                <button class="popup-close-btn" id="popup-close-btn">关闭弹窗</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 题库数据
+        const quizzes = [
+            {
+                id: 1,
+                title: "题目1: 巴黎留学",
+                content: `Studying abroad provides a golden opportunity to experience "real" exotic cultures. Living and studying in a foreign country can ______ the way to diminishing biased misunderstandings of the host country. For example, according to the author, Paris is not just full of ______ Frenchmen and quaint passageways. If you are organized enough, the so-called "endless" ______ processes could be completed in a few days. This can provide you with the ______ of appreciating the city more closely than any tourist. The author spent five months ______ in Paris: visiting museums, running around parks, ______ bars, winding aimlessly through narrow streets, and enjoying both the ______ moments and the surprises brought by the charming city. As an international student, the author had the chance to live in Paris as a(n) ______ and feel how colorful and inclusive the French culture is. The comfort she got from the ______ Sunday market, the warmth she found while saying bonjour to passers-by, and the calm she felt in the timeless ______ would all be treasured as her unique memory of Paris.`,
+                words: ["bureaucratic", "wandering", "local", "imaginable", "cityscape", "frequenting", "luring", "pave", "ecstasy", "vibrant", "atmosphere", "dairy", "tactic", "crate", "serene"],
+                answers: ["pave", "luring", "bureaucratic", "ecstasy", "wandering", "frequenting", "serene", "local", "vibrant", "cityscape"]
+            },
+            {
+                id: 2,
+                title: "题目2: 香格里拉",
+                content: `To realize the dream of finding the paradise described in James Hilton's Lost Horizon, the author and her fiancé went to a town in a ______ village named Shangri-La, which ______ of mystery and enchantment. Nevertheless, the town turned out to be far from the paradise envisioned in her mind. The Gansu Monastery, which was filled with ______ monks, crowds of tourists and lacked religious ______, deeply disappointed her. However, when she was persuaded to go to the town's weekly dance and watched people dance and spin, she couldn't remain ______ for long. She joined the circle and followed the steps with ______ degrees of success, beginning to see the charm of the town. On the second day they followed three old men and their cattle, looking like Shangri-La's ______ of walking the dogs, all the way into the hills. They were able to appreciate the unusual plants along the way up the hill. When they sat down with the fresh cold air ______ their faces and filling their lungs, she felt paradise had ______ up on her. She found peace there but still had to leave, for paradise is not ______ to a single place. It is all around for you to discover and find its charm and beauty.`,
+                words: ["remote", "rings", "complexity", "confined", "version", "perception", "weaves", "irritated", "varying", "hitting", "cynical", "isolate", "vibrancy", "pulse", "crept"],
+                answers: ["remote", "rings", "irritated", "vibrancy", "cynical", "varying", "version", "hitting", "crept", "confined"]
+            },
+            {
+                id: 3,
+                title: "题目3: 传统教材",
+                content: `Classic textbooks remain the first choice on campus despite the hype about e-books. Though the era has turned from print to "print-plus", with publishers ______ to produce digital materials, such as ______ codes and archives of works along with the distinctive onionskin-thin pages, or books with digital extras and ______, the vast majority of students still show a ______ for printed textbooks due to the comfort of print. ______ partly by students' concern over cost, and partly by the pedagogical philosophy that textbooks should be at the reading level of most students and should require some careful reading attention, many professors stick with textbooks, without making ______ online material a deciding factor in choosing a textbook. Although some publishing companies have placed bigger ______ on new kinds of digital services and have seen signs of a fast ______ from a print to a digital world, it's generally agreed that print products won't ______, but will exist side by side with digital products to ______ different demands.`,
+                words: ["preference", "enhancements", "transition", "bets", "envision", "driven", "scrambling", "accommodate", "supplemental", "distribution", "access", "vanish", "predominant", "interactive", "relatively"],
+                answers: ["scrambling", "access", "enhancements", "preference", "Driven", "supplemental", "bets", "transition", "vanish", "accommodate"]
+            },
+            {
+                id: 4,
+                title: "题目4: 美国移民",
+                content: `The immigration issue has long been controversial in the history of America. The immigrants were claimed to be too different to ______ into the mainstream. Today, the voice of disapproval has not ______ yet. But lots of popular myths are proved wrong by ______ statistics and concrete facts. For example, immigrants do not rob jobs away nor drain the government finances; the population flow is not out of ______ and they do not cause overpopulation. Instead, the country has benefited ______ from immigration. With the efforts of immigrants, the nation's economy has become more productive and flexible, and the declining urban centers have been ______. In high-tech sectors, they developed new products with their ______ ideas, providing millions of Americans with job vacancies; in lower-skilled sectors, they take the jobs that most Americans will not take such as ______ service. What's more, the immigrants and their ______ paid more taxes than they collected in government services. Therefore, hardworking and peaceful immigrants should not be treated as ______ and blocked outside of the border.`,
+                words: ["proportion", "assimilate", "immensely", "ceased", "counterparts", "innovative", "casualty", "authoritative", "drain", "terrorists", "despite", "integral", "revitalized", "offspring", "domestic"],
+                answers: ["assimilate", "ceased", "authoritative", "proportion", "immensely", "revitalized", "innovative", "domestic", "offspring", "terrorists"]
+            },
+            {
+                id: 5,
+                title: "题目5: 手机健康",
+                content: `What impact can mobile phones have on their users' health? Many people worry about the supposed ill '______' caused by radiation from handsets and base stations, despite the lack of credible evidence of any harm. But evidence for the beneficial effects of mobile phones on health is rather more '______'. Indeed, a systematic review carried out by Rifat Atun and his colleagues at Imperial College, London, rounds up 150 examples of the use of text-messaging in the '______' of health care. These uses fall into three categories: efficiency gains; public-health gains; and direct benefits to patients by incorporating text-messaging into treatment regimes. The study, funded by Vodafone, the world's largest mobile operator, was published this week.<br><br>Using texting to boost '______' is not rocket science, but big savings can be achieved. Several trials carried out in England have found that the use of text-messaging '______' reduces the number of missed appointments with family doctors by 26%-39%, for example, and the number of missed hospital appointments by 33%-50%. If such schemes were rolled out nationally, this would translate into annual savings of 256 million to 364 million pounds.<br><br>Text messages are also being used to remind patients about blood tests, clinics, scans, and dental '______'. Similar schemes in America, Norway and Sweden have had equally satisfying results—though the use of text-message reminders in the Netherlands, where non-attendance rates are low, at 4%, had no effect other than to annoy patients.<br><br>Text messages can also be a good way to disseminate public-health information, particularly to groups who are hard to reach by other means, such as teenagers, or in developing countries where other means of communication are '______'. Text messages have been used in India to inform people about the World Health Organization's strategy to control tuberculosis, for example, and in Kenya, Nigeria and Mali to provide information about HIV and malaria. In Iraq, text messages were used to support a campaign to '______' nearly 5 million children against polio.<br><br>Finally, there are the uses of text-messaging as part of a treatment regime. These '______' sending reminders to patients to take their medicine at the right time, or to encourage compliance with exercise regimes or efforts to stop smoking. The evidence for the effectiveness of such schemes is generally anecdotal, however, notes Dr. Rifat. More '______' research is needed—which is why his team published three papers this week looking at the use of mobile phone in health care in more detail. One of these papers, written in conjunction with Victoria Franklin and Stephen Greene of the University of Dundee, in Scotland, reports the results of a trial in which diabetic teenagers' treatment was backed up with text-messaging.`,
+                words: ["Delivery", "involve", "unavailable", "effects", "reminders", "appointments", "quantitative", "efficiency", "abundant", "vaccinate"],
+                answers: ["effects", "abundant", "Delivery", "efficiency", "reminders", "appointments", "unavailable", "vaccinate", "involve", "quantitative"]
+            },
+            {
+                id: 6,
+                title: "题目6: STEM教育",
+                content: `In the America of our own time, the great educational challenge has become an effort to strengthen the teaching of what is now known as the STEM (science, technology, engineering and math). There is '______' and justified concern that the United States is '______' behind much of the rest of the developed world in these essential '______'. India, China, Japan, and other regions seem to be seizing technological leadership.<br><br>At the same time, perhaps '______', the humanities—while still popular in elite colleges and universities—have experienced a significant decline. Humanistic disciplines are seriously '______', not just by the government and the foundations but by academic institutions themselves. Humanists are usually among the lowest-paid '______' members at most institutions and are often lightly regarded because they do not generate grant income and because they provide no obvious credentials for most nonacademic careers.<br><br>Undoubtedly American education should train more scientists and engineers. Much of the concern among politicians about the state of American universities today is focused on the absence of "real world" education—which means preparation for professional and scientific careers. But the idea that institutions and their students must decide between humanities and science is false. Our society could not '______' without scientific and technological knowledge. But we would be equally impoverished without humanistic knowledge as well. Science and technology teach us what we can do. Humanistic '______' helps us understand what we should do.<br><br>It is almost '______' to imagine our society without thinking of the extraordinary achievements of scientists and engineers in building our complicated '______'. But try to imagine our world as well without the remarkable works that have defined our culture and values. We have always needed, and we still need, both.`,
+                words: ["underfunded", "impossible", "survive", "inevitably", "faculty", "considerable", "world", "thinking", "falling", "disciplines"],
+                answers: ["considerable", "falling", "disciplines", "inevitably", "underfunded", "faculty", "survive", "thinking", "impossible", "world"]
+            }
+        ];
+
+        // 当前状态
+        let currentQuiz = 1;
+        let userAnswers = Array(10).fill("");
+        let usedWords = [];
+        let currentBlankIndex = -1;
+        let practiceMode = false;
+        let shuffleWords = false;
+        let autoClosePopup = true; // 默认选择后自动关闭弹窗
+
+        // DOM元素
+        const articleContent = document.getElementById('article-content');
+        const wordOptions = document.getElementById('word-options');
+        const quizTitle = document.getElementById('quiz-title');
+        const popupOverlay = document.getElementById('popup-overlay');
+        const popupWords = document.getElementById('popup-words');
+        const popupTitle = document.getElementById('popup-title');
+        const popupCloseBtn = document.getElementById('popup-close-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const checkBtn = document.getElementById('check-btn');
+        const resultContainer = document.getElementById('result-container');
+        const quizButtons = document.querySelectorAll('.quiz-btn');
+        const shuffleCheckbox = document.getElementById('shuffle-words');
+        const practiceCheckbox = document.getElementById('practice-mode');
+        const autoCloseCheckbox = document.getElementById('auto-close-popup');
+        const filledCount = document.getElementById('filled-count');
+        const remainingCount = document.getElementById('remaining-count');
+
+        // 初始化
+        function init() {
+            loadQuiz(currentQuiz);
+            setupEventListeners();
+            updateStats();
+        }
+
+        // 加载题目
+        function loadQuiz(quizId) {
+            const quiz = quizzes.find(q => q.id === quizId);
+            if (!quiz) return;
+            
+            // 重置状态
+            userAnswers = Array(10).fill("");
+            usedWords = [];
+            currentBlankIndex = -1;
+            
+            // 更新标题
+            quizTitle.textContent = quiz.title;
+            
+            // 更新文章内容 - 修复：正确生成10个填空处
+            let contentHTML = quiz.content;
+
+            // 将文章中的下划线替换为空白处
+            let blankIndex = 0;
+
+            // 处理题目5和6中的特殊下划线（带引号的）
+            if (quizId === 5 || quizId === 6) {
+                // 题目5和6有单引号包裹的下划线，需要特殊处理
+                contentHTML = contentHTML.replace(/'______'/g, () => {
+                    if (blankIndex < 10) {
+                        const blankId = `blank-${blankIndex}`;
+                        const answer = userAnswers[blankIndex];
+                        const blankHTML = `<span class="blank" id="${blankId}" data-index="${blankIndex+1}">${answer || "<span class='blank-placeholder'>______</span>"}</span>`;
+                        blankIndex++;
+                        return `'${blankHTML}'`;
+                    }
+                    return "'______'";
+                });
+                
+                // 处理剩余的下划线
+                contentHTML = contentHTML.replace(/______/g, () => {
+                    if (blankIndex < 10) {
+                        const blankId = `blank-${blankIndex}`;
+                        const answer = userAnswers[blankIndex];
+                        const blankHTML = `<span class="blank" id="${blankId}" data-index="${blankIndex+1}">${answer || "<span class='blank-placeholder'>______</span>"}</span>`;
+                        blankIndex++;
+                        return blankHTML;
+                    }
+                    return "______";
+                });
+            } else {
+                // 其他题目正常处理
+                contentHTML = contentHTML.replace(/______/g, () => {
+                    if (blankIndex < 10) {
+                        const blankId = `blank-${blankIndex}`;
+                        const answer = userAnswers[blankIndex];
+                        const blankHTML = `<span class="blank" id="${blankId}" data-index="${blankIndex+1}">${answer || "<span class='blank-placeholder'>______</span>"}</span>`;
+                        blankIndex++;
+                        return blankHTML;
+                    }
+                    return "______";
+                });
+            }
+
+            articleContent.innerHTML = `<div class="question-text">${contentHTML}</div>`;
+                        
+                        
+            
+            // 加载单词选项
+            loadWordOptions(quiz.words);
+            
+            // 更新按钮状态
+            quizButtons.forEach(btn => {
+                if (parseInt(btn.dataset.quiz) === quizId) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // 隐藏结果
+            resultContainer.classList.remove('show');
+            
+            // 更新统计
+            updateStats();
+            
+            // 绑定空白处点击事件
+            document.querySelectorAll('.blank').forEach(blank => {
+                blank.addEventListener('click', handleBlankClick);
+                
+                // 如果有已填写的答案，更新显示
+                const index = parseInt(blank.dataset.index);
+                if (userAnswers[index]) {
+                    blank.innerHTML = `<span class="blank-index">${index+1}</span>${userAnswers[index]}`;
+                    blank.classList.add('filled');
+                }
+            });
+            
+            // 更新单词选项状态
+            updateUsedWords();
+        }
+
+        // 加载单词选项
+        function loadWordOptions(words) {
+            // 清空单词选项
+            wordOptions.innerHTML = "";
+            popupWords.innerHTML = "";
+            
+            // 如果需要打乱顺序
+            let displayWords = [...words];
+            if (shuffleWords) {
+                displayWords = shuffleArray([...words]);
+            }
+            
+            // 创建单词选项
+            displayWords.forEach((word, index) => {
+                // 右侧单词选项
+                const wordOption = document.createElement('div');
+                wordOption.className = 'word-option';
+                wordOption.textContent = word;
+                wordOption.dataset.word = word;
+                wordOption.addEventListener('click', () => handleWordOptionClick(word));
+                wordOptions.appendChild(wordOption);
+                
+                // 弹出框单词选项 (仅手机需要)
+                const popupWord = document.createElement('div');
+                popupWord.className = 'popup-word';
+                popupWord.textContent = word;
+                popupWord.dataset.word = word;
+                popupWord.addEventListener('click', () => handlePopupWordClick(word));
+                popupWords.appendChild(popupWord);
+            });
+            
+            // 更新已用单词状态
+            updateUsedWords();
+        }
+
+        // 处理空白处点击
+        function handleBlankClick(e) {
+            const blank = e.currentTarget;
+            const index = parseInt(blank.dataset.index);
+            currentBlankIndex = index;
+            
+            // 高亮当前空白处
+            document.querySelectorAll('.blank').forEach(b => b.classList.remove('current-blank'));
+            blank.classList.add('current-blank');
+            
+            // 在手机上显示单词选择弹出框
+            if (window.innerWidth <= 768) {
+                showWordPopup();
+            }
+        }
+
+        // 显示单词选择弹出框
+        function showWordPopup() {
+            // 更新弹出框标题
+            popupTitle.textContent = `选择单词填空 (第${currentBlankIndex + 1}题)`;
+            
+            // 更新弹出框中单词的使用状态
+            document.querySelectorAll('.popup-word').forEach(wordEl => {
+                const word = wordEl.dataset.word;
+                if (usedWords.includes(word) && userAnswers[currentBlankIndex] !== word) {
+                    wordEl.classList.add('used');
+                    wordEl.title = "该单词已被使用";
+                } else {
+                    wordEl.classList.remove('used');
+                    wordEl.title = "";
+                }
+            });
+            
+            popupOverlay.style.display = 'flex';
+        }
+
+        // 处理弹出框单词点击
+        function handlePopupWordClick(word) {
+            // 如果单词已被其他空使用，则不允许再次选择
+            if (usedWords.includes(word) && userAnswers[currentBlankIndex] !== word) {
+                return;
+            }
+            
+            // 设置单词
+            setWordToBlank(word);
+            
+            // 如果设置了自动关闭弹窗，则关闭
+            if (autoClosePopup) {
+                popupOverlay.style.display = 'none';
+            }
+        }
+
+        // 处理右侧单词选项点击
+        function handleWordOptionClick(word) {
+            // 如果单词已被其他空使用，则不允许再次选择
+            if (usedWords.includes(word) && userAnswers[currentBlankIndex] !== word) {
+                alert("该单词已被其他空使用，请先清空原位置或选择其他单词。");
+                return;
+            }
+            
+            // 如果没有选择空白处，则提示
+            if (currentBlankIndex === -1) {
+                alert("请先点击文章中的空白处，然后再选择单词。");
+                return;
+            }
+            
+            setWordToBlank(word);
+        }
+
+        // 设置单词到空白处
+        function setWordToBlank(word) {
+            // 如果之前有选择其他单词，则释放该单词
+            if (userAnswers[currentBlankIndex] !== "") {
+                const previousWord = userAnswers[currentBlankIndex];
+                const index = usedWords.indexOf(previousWord);
+                if (index > -1) {
+                    usedWords.splice(index, 1);
+                }
+            }
+            
+            // 设置新单词
+            userAnswers[currentBlankIndex] = word;
+            
+            // 如果单词没有被使用过，则添加到已使用列表
+            if (!usedWords.includes(word)) {
+                usedWords.push(word);
+            }
+            
+            // 更新空白处显示
+            const blank = document.getElementById(`blank-${currentBlankIndex}`);
+            blank.innerHTML = userAnswers[currentBlankIndex];
+            blank.classList.add('filled');
+            blank.classList.remove('empty');
+            
+            // 更新单词选项状态
+            updateUsedWords();
+            
+            // 更新统计
+            updateStats();
+            
+            // 如果在背诵模式下，自动检查答案
+            if (practiceMode && userAnswers[currentBlankIndex] !== "") {
+                checkSingleAnswer(currentBlankIndex);
+            }
+        }
+
+        // 更新已用单词状态
+        function updateUsedWords() {
+            // 更新右侧单词选项
+            document.querySelectorAll('.word-option').forEach(option => {
+                const word = option.dataset.word;
+                if (usedWords.includes(word)) {
+                    option.classList.add('used');
+                    option.title = "该单词已被使用";
+                } else {
+                    option.classList.remove('used');
+                    option.title = "";
+                }
+            });
+            
+            // 更新弹出框单词选项
+            document.querySelectorAll('.popup-word').forEach(option => {
+                const word = option.dataset.word;
+                if (usedWords.includes(word)) {
+                    option.classList.add('used');
+                    option.title = "该单词已被使用";
+                } else {
+                    option.classList.remove('used');
+                    option.title = "";
+                }
+            });
+        }
+
+        // 检查单个答案（背诵模式）
+        function checkSingleAnswer(index) {
+            const quiz = quizzes.find(q => q.id === currentQuiz);
+            if (!quiz) return;
+            
+            const blank = document.getElementById(`blank-${index}`);
+            const userAnswer = userAnswers[index];
+            const correctAnswer = quiz.answers[index];
+            
+            if (userAnswer === correctAnswer) {
+                blank.style.color = "#27ae60";
+                blank.style.borderBottomColor = "#27ae60";
+                blank.classList.remove('empty');
+            } else {
+                blank.style.color = "#e74c3c";
+                blank.style.borderBottomColor = "#e74c3c";
+                blank.classList.add('empty');
+                
+                // 显示正确答案提示
+                setTimeout(() => {
+                    alert(`第${index+1}题答案错误。正确答案是: "${correctAnswer}"`);
+                }, 100);
+            }
+        }
+
+        // 检查所有答案
+        function checkAllAnswers() {
+            const quiz = quizzes.find(q => q.id === currentQuiz);
+            if (!quiz) return;
+            
+            let correctCount = 0;
+            const incorrectIndices = [];
+            
+            // 检查每个答案
+            for (let i = 0; i < 10; i++) {
+                const blank = document.getElementById(`blank-${i}`);
+                const userAnswer = userAnswers[i];
+                const correctAnswer = quiz.answers[i];
+                
+                if (userAnswer === correctAnswer) {
+                    blank.style.color = "#27ae60";
+                    blank.style.borderBottomColor = "#27ae60";
+                    blank.classList.remove('empty');
+                    correctCount++;
+                } else {
+                    blank.style.color = "#e74c3c";
+                    blank.style.borderBottomColor = "#e74c3c";
+                    blank.classList.add('empty');
+                    incorrectIndices.push(i);
+                }
+            }
+            
+            // 显示结果
+            showResult(correctCount, incorrectIndices, quiz.answers);
+        }
+
+        // 显示结果
+        function showResult(correctCount, incorrectIndices, correctAnswers) {
+            resultContainer.innerHTML = "";
+            
+            if (correctCount === 10) {
+                resultContainer.className = "result show correct";
+                resultContainer.innerHTML = `
+                    <div class="score">恭喜！全部正确！ (10/10)</div>
+                    <p>你完美地完成了这个练习！</p>
+                    <div class="correct-answer">正确答案:</div>
+                    <div class="word-list">
+                        ${correctAnswers.map((answer, index) => `
+                            <div class="word-item correct">${index+1}. ${answer}</div>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                resultContainer.className = "result show incorrect";
+                resultContainer.innerHTML = `
+                    <div class="score">答对了 ${correctCount} 题，答错了 ${10-correctCount} 题</div>
+                    <p>请检查错误的答案并再次尝试。</p>
+                    <div class="correct-answer">正确答案:</div>
+                    <div class="word-list">
+                        ${correctAnswers.map((answer, index) => {
+                            if (incorrectIndices.includes(index)) {
+                                return `<div class="word-item incorrect">${index+1}. ${answer}</div>`;
+                            } else {
+                                return `<div class="word-item correct">${index+1}. ${answer}</div>`;
+                            }
+                        }).join('')}
+                    </div>
+                `;
+            }
+            
+            // 滚动到结果区域
+            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // 重置当前题目
+        function resetQuiz() {
+            if (confirm("确定要重置当前题目吗？所有已填答案将被清空。")) {
+                loadQuiz(currentQuiz);
+            }
+        }
+
+        // 更新统计信息
+        function updateStats() {
+            const filled = userAnswers.filter(answer => answer !== "").length;
+            const remaining = 15 - usedWords.length;
+            
+            filledCount.textContent = filled;
+            remainingCount.textContent = remaining;
+        }
+
+        // 打乱数组顺序
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 题目按钮点击事件
+            quizButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentQuiz = parseInt(btn.dataset.quiz);
+                    loadQuiz(currentQuiz);
+                });
+            });
+            
+            // 重置按钮点击事件
+            resetBtn.addEventListener('click', resetQuiz);
+            
+            // 检查答案按钮点击事件
+            checkBtn.addEventListener('click', checkAllAnswers);
+            
+            // 弹出框关闭按钮点击事件
+            popupCloseBtn.addEventListener('click', () => {
+                popupOverlay.style.display = 'none';
+            });
+            
+            // 点击弹出框外部关闭
+            popupOverlay.addEventListener('click', (e) => {
+                if (e.target === popupOverlay) {
+                    popupOverlay.style.display = 'none';
+                }
+            });
+            
+            // 设置选项变化事件
+            shuffleCheckbox.addEventListener('change', () => {
+                shuffleWords = shuffleCheckbox.checked;
+                loadQuiz(currentQuiz);
+            });
+            
+            practiceCheckbox.addEventListener('change', () => {
+                practiceMode = practiceCheckbox.checked;
+            });
+            
+            autoCloseCheckbox.addEventListener('change', () => {
+                autoClosePopup = autoCloseCheckbox.checked;
+            });
+            
+            // 窗口大小变化时，如果是大屏幕，隐藏弹窗
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    popupOverlay.style.display = 'none';
+                }
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
