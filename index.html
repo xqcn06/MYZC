@@ -3487,6 +3487,16 @@
                 showWelcomeAnimation();
                 try { localStorage.setItem('visited', '1'); } catch(e) {}
             }
+            
+            // 版本更新自动弹出
+            const currentVersion = '2.3.0';
+            let lastSeenVersion = null;
+            try { lastSeenVersion = localStorage.getItem('ver'); } catch(e) {}
+            
+            if (lastSeenVersion !== currentVersion) {
+                setTimeout(() => { showModal(changelogModal); }, 2000);
+                try { localStorage.setItem('ver', currentVersion); } catch(e) {}
+            }
         }
         // 窗口大小改变时调整侧边栏
         function handleResize() {
@@ -4490,11 +4500,11 @@
             
             if (isCorrect) {
                 feedbackIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
-                feedbackTitle.innerHTML = '<i class="fas fa-check-circle"></i> 回答正确！';
+                feedbackTitle.textContent = '回答正确！';
                 feedbackMessage.style.display = 'none';
             } else {
                 feedbackIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
-                feedbackTitle.innerHTML = '<i class="fas fa-times-circle"></i> 回答错误';
+                feedbackTitle.textContent = '回答错误';
                 feedbackMessage.style.display = 'block';
                 
                 if (question.type === 'fill_in') {
