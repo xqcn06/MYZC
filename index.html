@@ -3481,14 +3481,13 @@
             
             // 版本检测：每次代码更新都显示欢迎动画
             const currentVersion = '2.3.0';
-            const lastVersion = localStorage.getItem('lastVersionSeen') || sessionStorage.getItem('welcomeShown');
+            const lastVersion = window.localStorage ? localStorage.getItem('lastVersionSeen') : null;
             
             if (lastVersion !== currentVersion) {
                 showWelcomeAnimation();
-                try {
-                    localStorage.setItem('lastVersionSeen', currentVersion);
-                } catch(e) {}
-                sessionStorage.setItem('welcomeShown', currentVersion);
+                if (window.localStorage) {
+                    try { localStorage.setItem('lastVersionSeen', currentVersion); } catch(e) {}
+                }
             }
         }
         // 窗口大小改变时调整侧边栏
@@ -5424,10 +5423,8 @@
         }
 
         function showToast(message, type = 'info') {
-            // 移除已有的toast
             document.querySelectorAll('.toast').forEach(toast => toast.remove());
             
-            // 创建toast元素
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             
@@ -5436,22 +5433,18 @@
             if (type === 'error') icon = 'times-circle';
             if (type === 'warning') icon = 'exclamation-circle';
             
-            toast.innerHTML = `
-                <i class="fas fa-${icon}"></i>
-                <span>${message.replace(/\n/g, '<br>')}</span>
-            `;
+            // 截断过长的消息
+            const shortMsg = message.length > 30 ? message.substring(0, 30) + '...' : message;
             
-            // 添加到页面
+            toast.innerHTML = `<i class="fas fa-${icon}"></i><span>${shortMsg}</span>`;
+            
             document.body.appendChild(toast);
-            
-            // 显示动画
             setTimeout(() => toast.classList.add('show'), 10);
             
-            // 3秒后移除
             setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 300);
-            }, 4000);
+            }, 3000);
         }
 
         function updateUI() {
@@ -5683,7 +5676,6 @@
                 screen.style.opacity = '0';
                 setTimeout(() => {
                     screen.style.display = 'none';
-                    startGuide();
                 }, 500);
             }
         }
@@ -5867,22 +5859,26 @@
         style.textContent = `
             .toast {
                 position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 14px 20px;
-                background: rgba(255, 255, 255, 0.9);
+                bottom: 80px;
+                left: 50%;
+                transform: translateX(-50%) translateY(20px);
+                padding: 10px 16px;
+                background: rgba(30, 30, 30, 0.9);
                 backdrop-filter: blur(10px);
                 -webkit-backdrop-filter: blur(10px);
-                border-radius: var(--border-radius);
-                box-shadow: var(--shadow-lg);
+                border-radius: 20px;
                 display: flex;
                 align-items: center;
-                gap: 10px;
-                transform: translateX(120%);
-                transition: all 0.4s var(--ease-spring);
+                gap: 8px;
+                transition: all 0.3s var(--ease);
                 z-index: 9999;
-                max-width: 400px;
-                border: 1px solid rgba(255, 255, 255, 0.5);
+                max-width: 280px;
+                color: white;
+                font-size: 0.8rem;
+            }
+            .toast.show {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
             }
             
             .toast.show {
