@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>考试自测系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&family=Inter:wght@300;400;600&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #2c3e50;
@@ -2400,16 +2400,16 @@
 </head>
 <body>
     <!-- 欢迎动画 -->
-    <div id="welcomeScreen" style="position:fixed;inset:0;z-index:10000;background:#0f0f1a;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;cursor:pointer;overflow:hidden;" onclick="skipWelcome()">
-        <div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 40%, rgba(102,126,234,0.15) 0%, transparent 50%),radial-gradient(circle at 70% 60%, rgba(118,75,162,0.1) 0%, transparent 50%);"></div>
+    <div id="welcomeScreen" style="position:fixed;inset:0;z-index:10000;background:#0a0a14;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;cursor:pointer;overflow:hidden;" onclick="skipWelcome()">
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 40%, rgba(102,126,234,0.12) 0%, transparent 50%),radial-gradient(circle at 70% 60%, rgba(118,75,162,0.08) 0%, transparent 50%);"></div>
         <div style="position:relative;z-index:1;text-align:center;">
-            <div style="font-size:4rem;font-weight:200;letter-spacing:8px;margin-bottom:8px;opacity:0;animation:fadeUp 1s ease 0.3s forwards;" id="welcomeText">你好</div>
-            <div style="font-size:1rem;font-weight:300;letter-spacing:4px;color:rgba(255,255,255,0.5);opacity:0;animation:fadeUp 1s ease 0.6s forwards;">祝复习顺利</div>
+            <div style="font-family:'Ma Shan Zheng','ZCOOL XiaoWei','Noto Serif SC',serif;font-size:4.5rem;font-weight:400;letter-spacing:12px;margin-bottom:12px;opacity:0;animation:fadeUp 1.2s ease 0.3s forwards;" id="welcomeText">你好</div>
+            <div style="font-family:'Inter',sans-serif;font-size:0.95rem;font-weight:300;letter-spacing:6px;color:rgba(255,255,255,0.45);opacity:0;animation:fadeUp 1s ease 0.8s forwards;">祝复习顺利</div>
         </div>
-        <div style="position:absolute;bottom:50px;font-size:0.7rem;color:rgba(255,255,255,0.3);opacity:0;animation:fadeUp 1s ease 1s forwards;">
+        <div style="position:absolute;bottom:50px;font-family:'Inter',sans-serif;font-size:0.65rem;color:rgba(255,255,255,0.2);opacity:0;animation:fadeUp 1s ease 1.2s forwards;">
             <div>© 2026 XJQ · Designed by Xin Junqian</div>
         </div>
-        <div style="position:absolute;bottom:20px;font-size:0.65rem;color:rgba(255,255,255,0.2);opacity:0;animation:fadeUp 1s ease 1.2s forwards;">点击继续</div>
+        <div style="position:absolute;bottom:20px;font-family:'Inter',sans-serif;font-size:0.6rem;color:rgba(255,255,255,0.15);opacity:0;animation:fadeUp 1s ease 1.5s forwards;">点击继续</div>
     </div>
     <style>
         @keyframes fadeUp {
@@ -2422,14 +2422,18 @@
     <div id="guideHighlight" style="display:none;position:fixed;z-index:9999;border:3px solid #667eea;border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,0.45);pointer-events:none;transition:all 0.5s ease;"></div>
     
     <!-- 引导卡片 -->
-    <div id="guideCard" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:10000;background:white;border-radius:16px;padding:20px;width:90%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,0.2);animation:scaleIn 0.3s ease;">
-        <div style="width:40px;height:40px;background:var(--gradient-primary);border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.1rem;margin-bottom:12px;">
-            <i class="fas fa-book" id="guideIcon"></i>
+    <div id="guideCard" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:10000;background:white;border-radius:20px;padding:24px;width:92%;max-width:380px;box-shadow:0 10px 40px rgba(0,0,0,0.2);animation:scaleIn 0.3s ease;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+            <div style="width:40px;height:40px;background:var(--gradient-primary);border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;font-size:1rem;">
+                <i class="fas fa-book" id="guideIcon"></i>
+            </div>
+            <div>
+                <h3 id="guideTitle" style="font-size:1.05rem;font-weight:700;color:var(--gray-800);margin:0;"></h3>
+                <p id="guideDesc" style="font-size:0.8rem;color:var(--gray-500);margin:2px 0 0 0;"></p>
+            </div>
         </div>
-        <h3 id="guideTitle" style="font-size:1.1rem;font-weight:700;color:var(--gray-800);margin-bottom:6px;"></h3>
-        <p id="guideDesc" style="font-size:0.85rem;color:var(--gray-600);line-height:1.5;margin-bottom:16px;"></p>
-        <div id="guideExtra" style="display:none;padding:10px;background:rgba(102,126,234,0.08);border-radius:8px;margin-bottom:16px;border-left:3px solid #667eea;">
-            <p id="guideExtraText" style="font-size:0.8rem;color:var(--gray-600);line-height:1.5;white-space:pre-line;"></p>
+        <div id="guideExtra" style="display:none;padding:12px;background:var(--gray-50);border-radius:10px;margin-bottom:16px;border-left:3px solid #667eea;">
+            <p id="guideExtraText" style="font-size:0.78rem;color:var(--gray-600);line-height:1.6;white-space:pre-line;margin:0;"></p>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;">
             <button onclick="skipGuide()" style="padding:8px 16px;border:none;background:var(--gray-100);border-radius:8px;font-size:0.85rem;cursor:pointer;color:var(--gray-600);">跳过</button>
@@ -3477,11 +3481,14 @@
             
             // 版本检测：每次代码更新都显示欢迎动画
             const currentVersion = '2.3.0';
-            const lastVersion = localStorage.getItem('lastVersionSeen');
+            const lastVersion = localStorage.getItem('lastVersionSeen') || sessionStorage.getItem('welcomeShown');
             
             if (lastVersion !== currentVersion) {
                 showWelcomeAnimation();
-                localStorage.setItem('lastVersionSeen', currentVersion);
+                try {
+                    localStorage.setItem('lastVersionSeen', currentVersion);
+                } catch(e) {}
+                sessionStorage.setItem('welcomeShown', currentVersion);
             }
         }
         // 窗口大小改变时调整侧边栏
@@ -5683,10 +5690,10 @@
 
         let guideStep = 0;
         const guideSteps = [
-            { icon: 'fa-home', title: '首页', desc: '这里是你的学习概况，可以查看题库数量、答题进度和连续学习天数。', tab: 'dashboard', target: '.dashboard-grid' },
-            { icon: 'fa-file-import', title: '导入题库', desc: '将JSON格式的题库文件拖拽到这里，或点击选择文件导入。', tab: 'import', target: '.drop-zone' },
-            { icon: 'fa-pen-to-square', title: '开始练习', desc: '选择章节和题型，开始答题。支持单选、多选、判断和填空题。', tab: 'practice', target: '#questionContent' },
-            { icon: 'fa-database', title: '数据管理', desc: '在此页面管理你的学习数据：', tab: 'dataManagement', target: '#dataManagement .card:last-child', extra: '• 清空答题记录 - 重置所有答题历史\n• 重置统计 - 清零学习数据\n• 清空所有数据 - 完全重置系统' }
+            { icon: 'fa-chart-line', title: '学习概况', desc: '这里显示你的题库数量、答题进度和学习天数，随时掌握学习状态。', tab: 'dashboard', target: '#totalQuestions', extra: '统计卡片展示核心数据：\n• 题库总数 - 已导入的题目数量\n• 综合正确率 - 历史答题准确率\n• 今日答题 - 今天的练习量\n• 连续天数 - 坚持学习的天数' },
+            { icon: 'fa-cloud-upload-alt', title: '导入题库', desc: '支持JSON格式的题库文件，拖拽或点击即可导入。', tab: 'import', target: '.drop-zone', extra: '导入步骤：\n1. 准备JSON格式的题库文件\n2. 拖拽文件到上方区域，或点击选择\n3. 系统自动解析并统计题目数量\n4. 导入后即可开始练习' },
+            { icon: 'fa-pen-to-square', title: '开始练习', desc: '选择章节和题型，开始答题练习。', tab: 'practice', target: '.practice-header', extra: '练习功能：\n• 支持单选、多选、判断、填空四种题型\n• 可按章节和题型筛选\n• 答对自动跳转，答错收录错题本\n• 键盘快捷键：1-6选择选项，空格提交' },
+            { icon: 'fa-database', title: '数据管理', desc: '管理你的学习数据，支持备份和恢复。', tab: 'dataManagement', target: '#clearAllDataBtn', extra: '数据操作：\n• 导出所有数据 - 备份到本地文件\n• 导入数据 - 从备份恢复\n• 清空答题记录 - 重置答题历史\n• 重置统计 - 清零学习数据\n• 清空所有数据 - 完全重置系统' }
         ];
 
         function startGuide() {
