@@ -3470,8 +3470,11 @@
             const currentVersion = '2.3.0';
             const lastVersion = localStorage.getItem('lastVersionSeen');
             
+            console.log('lastVersion:', lastVersion, 'currentVersion:', currentVersion, 'match:', lastVersion === currentVersion);
+            
             if (lastVersion !== currentVersion) {
                 // 有新版本或首次进入：播放欢迎动画
+                console.log('Starting welcome animation');
                 showWelcomeAnimation();
                 localStorage.setItem('lastVersionSeen', currentVersion);
             }
@@ -5647,13 +5650,21 @@
         let welcomeTimer = null;
         
         function showWelcomeAnimation() {
+            console.log('showWelcomeAnimation called');
             const screen = document.getElementById('welcomeScreen');
             const text = document.getElementById('welcomeText');
             const sub = document.getElementById('welcomeSub');
             const hint = document.getElementById('welcomeHint');
             
-            setTimeout(() => { text.style.opacity = '1'; text.style.transform = 'translateY(0)'; }, 300);
-            setTimeout(() => { sub.style.opacity = '1'; }, 800);
+            console.log('screen:', screen, 'text:', text);
+            
+            setTimeout(() => { 
+                if (text) {
+                    text.style.opacity = '1'; 
+                    text.style.transform = 'translateY(0)'; 
+                }
+            }, 300);
+            setTimeout(() => { if (sub) sub.style.opacity = '1'; }, 800);
             setTimeout(() => { if (hint) hint.style.opacity = '1'; }, 1000);
             
             welcomeTimer = setTimeout(() => {
