@@ -2400,7 +2400,7 @@
 </head>
 <body>
     <!-- 欢迎动画 -->
-    <div id="welcomeScreen" style="position:fixed;inset:0;z-index:10000;background:#0a0a14;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;cursor:pointer;overflow:hidden;" onclick="skipWelcome()">
+    <div id="welcomeScreen" style="position:fixed;inset:0;z-index:10000;background:#0a0a14;display:none;flex-direction:column;align-items:center;justify-content:center;color:white;cursor:pointer;overflow:hidden;" onclick="skipWelcome()">
         <div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 40%, rgba(102,126,234,0.12) 0%, transparent 50%),radial-gradient(circle at 70% 60%, rgba(118,75,162,0.08) 0%, transparent 50%);"></div>
         <div style="position:relative;z-index:1;text-align:center;">
             <div style="font-family:'Ma Shan Zheng','ZCOOL XiaoWei','Noto Serif SC',serif;font-size:4.5rem;font-weight:400;letter-spacing:12px;margin-bottom:12px;opacity:0;animation:fadeUp 1.2s ease 0.3s forwards;" id="welcomeText">你好</div>
@@ -3479,24 +3479,13 @@
             updateUI();
             renderBankList();
             
-            // 版本检测：每次代码更新都显示欢迎动画
-            const currentVersion = '2.3.0';
-            let lastVersion = null;
+            // 首次进入显示欢迎动画
+            let visited = null;
+            try { visited = localStorage.getItem('visited'); } catch(e) {}
             
-            // 尝试多种方式读取版本
-            try { lastVersion = localStorage.getItem('lastVersionSeen'); } catch(e) {}
-            if (!lastVersion) {
-                try {
-                    const match = document.cookie.match(/lastVersion=([^;]+)/);
-                    if (match) lastVersion = match[1];
-                } catch(e) {}
-            }
-            
-            if (lastVersion !== currentVersion) {
+            if (!visited) {
                 showWelcomeAnimation();
-                // 保存版本号到多种存储
-                try { localStorage.setItem('lastVersionSeen', currentVersion); } catch(e) {}
-                try { document.cookie = 'lastVersion=' + currentVersion + ';path=/;max-age=31536000'; } catch(e) {}
+                try { localStorage.setItem('visited', '1'); } catch(e) {}
             }
         }
         // 窗口大小改变时调整侧边栏
