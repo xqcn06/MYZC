@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>考试自测系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #2c3e50;
@@ -2398,6 +2399,34 @@
     </style>
 </head>
 <body>
+    <!-- 欢迎动画 -->
+    <div id="welcomeScreen" style="position:fixed;inset:0;z-index:10000;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;opacity:1;transition:opacity 0.8s ease;">
+        <div id="welcomeText" style="font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:3.5rem;font-weight:700;opacity:0;transform:translateY(30px);transition:all 1s ease;">你好</div>
+        <div id="welcomeSub" style="font-family:'Inter',sans-serif;font-size:1.1rem;font-weight:300;opacity:0;margin-top:16px;letter-spacing:2px;transition:all 1s ease 0.3s;">祝复习顺利</div>
+        <div style="position:absolute;bottom:40px;font-size:0.7rem;opacity:0.5;text-align:center;font-family:'Inter',sans-serif;">
+            <div>© 2026 XJQ · Designed by Xin Junqian</div>
+        </div>
+    </div>
+
+    <!-- 引导遮罩 -->
+    <div id="guideOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);">
+        <div id="guideCard" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:white;border-radius:20px;padding:28px;max-width:340px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:scaleIn 0.3s ease;">
+            <div style="width:48px;height:48px;background:var(--gradient-primary);border-radius:14px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.3rem;margin-bottom:16px;">
+                <i class="fas fa-book" id="guideIcon"></i>
+            </div>
+            <h3 id="guideTitle" style="font-size:1.2rem;font-weight:700;color:var(--gray-800);margin-bottom:8px;"></h3>
+            <p id="guideDesc" style="font-size:0.9rem;color:var(--gray-600);line-height:1.6;margin-bottom:20px;"></p>
+            <div id="guideHighlight" style="display:none;padding:12px;background:rgba(102,126,234,0.08);border-radius:10px;margin-bottom:20px;border-left:3px solid #667eea;">
+                <p id="guideHighlightText" style="font-size:0.8rem;color:var(--gray-600);line-height:1.6;"></p>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <button onclick="skipGuide()" style="padding:8px 16px;border:none;background:var(--gray-100);border-radius:8px;font-size:0.85rem;cursor:pointer;color:var(--gray-600);">跳过</button>
+                <div style="display:flex;gap:6px;" id="guideDots"></div>
+                <button onclick="nextGuide()" id="guideNextBtn" style="padding:8px 20px;border:none;background:var(--gradient-primary);border-radius:8px;font-size:0.85rem;cursor:pointer;color:white;font-weight:600;">下一步</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 题库查看器弹窗 -->
     <div class="modal-overlay" id="viewerModal">
         <div class="modal" style="max-width:600px;max-height:85vh;display:flex;flex-direction:column;">
@@ -3420,12 +3449,7 @@
             migrateOldData();
             loadAllData();
             syncFromBank();
-            checkFirstVisitWithNewVersion();
-            const firstVisit = localStorage.getItem('firstVisit');
-            if (!firstVisit) {
-                showModal(welcomeModal);
-                localStorage.setItem('firstVisit', 'true');
-            }
+            
             if (isMobileDevice()) {
                 optimizeSettingsForMobile();
             }
@@ -3439,6 +3463,21 @@
             updateChapterSelect();
             updateUI();
             renderBankList();
+            
+            // 首次进入或新版本检测
+            const firstVisit = localStorage.getItem('firstVisit');
+            const currentVersion = '2.3.0';
+            const lastVersion = localStorage.getItem('lastVersionSeen');
+            
+            if (!firstVisit) {
+                // 首次进入：播放欢迎动画
+                showWelcomeAnimation();
+                localStorage.setItem('firstVisit', 'true');
+            } else if (lastVersion !== currentVersion) {
+                // 非首次但有新版本：直接弹出版本更新
+                showModal(changelogModal);
+                localStorage.setItem('lastVersionSeen', currentVersion);
+            }
         }
         // 窗口大小改变时调整侧边栏
         function handleResize() {
@@ -3652,7 +3691,7 @@
             showTutorialBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    showModal(welcomeModal);
+                    startGuide();
                 });
             });
             
@@ -5606,6 +5645,91 @@
             updateStats();
             showToast('题库已删除', 'success');
         };
+
+        // ===== 欢迎动画 + 引导流程 =====
+        function showWelcomeAnimation() {
+            const screen = document.getElementById('welcomeScreen');
+            const text = document.getElementById('welcomeText');
+            const sub = document.getElementById('welcomeSub');
+            
+            setTimeout(() => { text.style.opacity = '1'; text.style.transform = 'translateY(0)'; }, 300);
+            setTimeout(() => { sub.style.opacity = '1'; }, 800);
+            
+            setTimeout(() => {
+                screen.style.opacity = '0';
+                setTimeout(() => {
+                    screen.style.display = 'none';
+                    startGuide();
+                }, 800);
+            }, 3000);
+        }
+
+        let guideStep = 0;
+        const guideSteps = [
+            { icon: 'fa-home', title: '首页', desc: '这里是你的学习概况，可以查看题库数量、答题进度和连续学习天数。', tab: 'dashboard' },
+            { icon: 'fa-file-import', title: '导入题库', desc: '将JSON格式的题库文件拖拽到这里，或点击选择文件导入。', tab: 'import' },
+            { icon: 'fa-pen-to-square', title: '开始练习', desc: '选择章节和题型，开始答题。支持单选、多选、判断和填空题。', tab: 'practice' },
+            { icon: 'fa-database', title: '数据管理', desc: '在此页面管理你的学习数据：', tab: 'dataManagement', highlight: '• 清空答题记录 - 重置所有答题历史\n• 重置统计 - 清零学习数据\n• 清空所有数据 - 完全重置系统' }
+        ];
+
+        function startGuide() {
+            guideStep = 0;
+            renderGuideStep();
+            document.getElementById('guideOverlay').style.display = 'flex';
+        }
+
+        function renderGuideStep() {
+            const step = guideSteps[guideStep];
+            document.getElementById('guideIcon').className = 'fas ' + step.icon;
+            document.getElementById('guideTitle').textContent = step.title;
+            document.getElementById('guideDesc').textContent = step.desc;
+            
+            const highlight = document.getElementById('guideHighlight');
+            if (step.highlight) {
+                highlight.style.display = 'block';
+                document.getElementById('guideHighlightText').textContent = step.highlight;
+            } else {
+                highlight.style.display = 'none';
+            }
+            
+            // 切换到对应页面
+            switchTab(step.tab);
+            
+            // 更新按钮
+            document.getElementById('guideNextBtn').textContent = guideStep === guideSteps.length - 1 ? '完成' : '下一步';
+            
+            // 更新步骤指示器
+            const dots = document.getElementById('guideDots');
+            dots.innerHTML = '';
+            guideSteps.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:' + (i === guideStep ? '#667eea' : '#ddd') + ';transition:background 0.3s;';
+                dots.appendChild(dot);
+            });
+        }
+
+        function nextGuide() {
+            if (guideStep < guideSteps.length - 1) {
+                guideStep++;
+                renderGuideStep();
+            } else {
+                finishGuide();
+            }
+        }
+
+        function skipGuide() {
+            finishGuide();
+        }
+
+        function finishGuide() {
+            document.getElementById('guideOverlay').style.display = 'none';
+            const currentVersion = '2.3.0';
+            const lastVersion = localStorage.getItem('lastVersionSeen');
+            if (lastVersion !== currentVersion) {
+                showModal(changelogModal);
+                localStorage.setItem('lastVersionSeen', currentVersion);
+            }
+        }
 
         // ===== 题库查看器 =====
         let viewerBank = null;
