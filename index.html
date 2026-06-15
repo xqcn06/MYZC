@@ -5802,7 +5802,10 @@
             <div class="mobile-bottombar-icon"><i class="fas fa-database"></i></div>
             <span>数据</span>
         </a>
-        <div class="mobile-copyright" id="mobileCopyright">© 2026 XJQ · 考试自测系统 v2.3.0</div>
+        <div class="mobile-copyright" id="mobileCopyright">
+            <span class="copyright-item active">© 2026 XJQ · 考试自测系统 v2.3.0</span>
+            <span class="copyright-item">Designed & Developed by Xin Junqian</span>
+        </div>
     </nav>
     
     <style>
@@ -5878,19 +5881,33 @@
             .mobile-copyright {
                 display: block;
                 width: 100%;
-                text-align: center;
-                font-size: 0.6rem;
-                color: var(--gray-400);
                 max-height: 0;
                 padding: 0;
                 overflow: hidden;
                 opacity: 0;
                 transition: all 0.3s ease;
+                position: relative;
+                height: 0;
             }
             .mobile-copyright.show {
                 max-height: 20px;
+                height: auto;
                 padding: 4px 0;
                 opacity: 1;
+            }
+            .copyright-item {
+                position: absolute;
+                width: 100%;
+                text-align: center;
+                font-size: 0.6rem;
+                color: var(--gray-400);
+                opacity: 0;
+                transform: translateY(8px);
+                transition: all 0.4s ease;
+            }
+            .copyright-item.active {
+                opacity: 1;
+                transform: translateY(0);
             }
             .main-content {
                 padding-bottom: 70px !important;
@@ -5923,20 +5940,43 @@
             });
         };
 
-        // 手机端版权自动隐藏
+        // 手机端版权自动隐藏 + 轮播
         (function() {
             if (window.innerWidth > 992) return;
             var c = document.getElementById('mobileCopyright');
             var b = document.getElementById('mobileBottombar');
             if (!c || !b) return;
             var t;
+            var carouselTimer = null;
+            var carouselIndex = 0;
+            var items = c.querySelectorAll('.copyright-item');
+            
+            function rotate() {
+                items[carouselIndex].classList.remove('active');
+                carouselIndex = (carouselIndex + 1) % items.length;
+                items[carouselIndex].classList.add('active');
+            }
+            
+            function startCarousel() {
+                if (carouselTimer) return;
+                carouselTimer = setInterval(rotate, 3000);
+            }
+            
+            function stopCarousel() {
+                clearInterval(carouselTimer);
+                carouselTimer = null;
+            }
+            
             function show() {
                 c.classList.add('show');
+                startCarousel();
                 clearTimeout(t);
                 t = setTimeout(function() {
                     c.classList.remove('show');
+                    stopCarousel();
                 }, 3000);
             }
+            
             b.addEventListener('click', show);
             setTimeout(show, 500);
         })();
