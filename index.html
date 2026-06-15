@@ -3481,13 +3481,22 @@
             
             // 版本检测：每次代码更新都显示欢迎动画
             const currentVersion = '2.3.0';
-            const lastVersion = window.localStorage ? localStorage.getItem('lastVersionSeen') : null;
+            let lastVersion = null;
+            
+            // 尝试多种方式读取版本
+            try { lastVersion = localStorage.getItem('lastVersionSeen'); } catch(e) {}
+            if (!lastVersion) {
+                try {
+                    const match = document.cookie.match(/lastVersion=([^;]+)/);
+                    if (match) lastVersion = match[1];
+                } catch(e) {}
+            }
             
             if (lastVersion !== currentVersion) {
                 showWelcomeAnimation();
-                if (window.localStorage) {
-                    try { localStorage.setItem('lastVersionSeen', currentVersion); } catch(e) {}
-                }
+                // 保存版本号到多种存储
+                try { localStorage.setItem('lastVersionSeen', currentVersion); } catch(e) {}
+                try { document.cookie = 'lastVersion=' + currentVersion + ';path=/;max-age=31536000'; } catch(e) {}
             }
         }
         // 窗口大小改变时调整侧边栏
