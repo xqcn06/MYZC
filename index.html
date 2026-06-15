@@ -2364,7 +2364,6 @@
             }
             #viewerModal .modal > div:nth-child(2) {
                 padding: 8px 12px !important;
-            }
                 flex-shrink: 0 !important;
                 border-radius: 16px !important;
             }
@@ -2410,7 +2409,7 @@
             </div>
             <div style="padding:10px 16px;border-bottom:1px solid var(--gray-100);display:flex;gap:8px;">
                 <select id="viewerChapterSelect" onchange="viewerChapterIndex=parseInt(this.value);renderViewerQuestions();" style="flex:1;padding:8px 10px;border:1px solid var(--gray-200);border-radius:6px;font-size:0.8rem;background:white;"></select>
-                <button onclick="toggleAllAnswers()" id="viewerExpandBtn" style="padding:6px 12px;border:1px solid var(--gray-200);border-radius:6px;font-size:0.75rem;cursor:pointer;background:white;white-space:nowrap;">展开答案</button>
+                <button onclick="toggleAllAnswers()" id="viewerExpandBtn" style="padding:6px 12px;border:1px solid var(--gray-200);border-radius:6px;font-size:0.75rem;cursor:pointer;background:white;white-space:nowrap;">全部展开</button>
             </div>
             <div style="flex:1;overflow-y:auto;padding:12px;" id="viewerQuestionList"></div>
         </div>
@@ -5803,8 +5802,7 @@
             <span>数据</span>
         </a>
         <div class="mobile-copyright" id="mobileCopyright">
-            <span class="copyright-item active">© 2026 XJQ · 考试自测系统 v2.3.0</span>
-            <span class="copyright-item">Designed & Developed by Xin Junqian</span>
+            <span id="copyrightText">© 2026 XJQ · 考试自测系统 v2.3.0</span>
         </div>
     </nav>
     
@@ -5881,33 +5879,22 @@
             .mobile-copyright {
                 display: block;
                 width: 100%;
+                text-align: center;
+                font-size: 0.6rem;
+                color: var(--gray-400);
                 max-height: 0;
                 padding: 0;
                 overflow: hidden;
                 opacity: 0;
                 transition: all 0.3s ease;
-                position: relative;
-                height: 0;
             }
             .mobile-copyright.show {
                 max-height: 20px;
-                height: auto;
                 padding: 4px 0;
                 opacity: 1;
             }
-            .copyright-item {
-                position: absolute;
-                width: 100%;
-                text-align: center;
-                font-size: 0.6rem;
-                color: var(--gray-400);
-                opacity: 0;
-                transform: translateY(8px);
-                transition: all 0.4s ease;
-            }
-            .copyright-item.active {
-                opacity: 1;
-                transform: translateY(0);
+            #copyrightText {
+                transition: opacity 0.3s ease;
             }
             .main-content {
                 padding-bottom: 70px !important;
@@ -5945,35 +5932,30 @@
             if (window.innerWidth > 992) return;
             var c = document.getElementById('mobileCopyright');
             var b = document.getElementById('mobileBottombar');
-            if (!c || !b) return;
-            var t;
+            var t = document.getElementById('copyrightText');
+            if (!c || !b || !t) return;
+            var hideTimer;
             var carouselTimer = null;
-            var carouselIndex = 0;
-            var items = c.querySelectorAll('.copyright-item');
+            var texts = ['© 2026 XJQ · 考试自测系统 v2.3.0', 'Designed & Developed by Xin Junqian'];
+            var idx = 0;
             
             function rotate() {
-                items[carouselIndex].classList.remove('active');
-                carouselIndex = (carouselIndex + 1) % items.length;
-                items[carouselIndex].classList.add('active');
-            }
-            
-            function startCarousel() {
-                if (carouselTimer) return;
-                carouselTimer = setInterval(rotate, 3000);
-            }
-            
-            function stopCarousel() {
-                clearInterval(carouselTimer);
-                carouselTimer = null;
+                t.style.opacity = '0';
+                setTimeout(function() {
+                    idx = (idx + 1) % texts.length;
+                    t.textContent = texts[idx];
+                    t.style.opacity = '1';
+                }, 300);
             }
             
             function show() {
                 c.classList.add('show');
-                startCarousel();
-                clearTimeout(t);
-                t = setTimeout(function() {
+                if (!carouselTimer) carouselTimer = setInterval(rotate, 3000);
+                clearTimeout(hideTimer);
+                hideTimer = setTimeout(function() {
                     c.classList.remove('show');
-                    stopCarousel();
+                    clearInterval(carouselTimer);
+                    carouselTimer = null;
                 }, 3000);
             }
             
