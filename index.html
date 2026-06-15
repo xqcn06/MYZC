@@ -2400,10 +2400,11 @@
 </head>
 <body>
     <!-- 欢迎动画 -->
-    <div id="welcomeScreen" style="position:fixed;inset:0;z-index:10000;background:linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;opacity:1;transition:opacity 0.8s ease;">
+    <div id="welcomeScreen" style="position:fixed;inset:0;z-index:10000;background:linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;opacity:1;transition:opacity 0.8s ease;cursor:pointer;" onclick="skipWelcome()">
         <div id="welcomeText" style="font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:3.5rem;font-weight:700;opacity:0;transform:translateY(30px);transition:all 1s ease;text-shadow:0 2px 20px rgba(0,0,0,0.3);">你好</div>
         <div id="welcomeSub" style="font-family:'Inter',sans-serif;font-size:1.1rem;font-weight:300;opacity:0;margin-top:16px;letter-spacing:2px;transition:all 1s ease 0.3s;color:rgba(255,255,255,0.7);">祝复习顺利</div>
-        <div style="position:absolute;bottom:40px;font-size:0.7rem;opacity:0.4;text-align:center;font-family:'Inter',sans-serif;">
+        <div style="position:absolute;bottom:60px;font-size:0.75rem;opacity:0;transition:all 1s ease 1s;color:rgba(255,255,255,0.5);" id="welcomeHint">点击任意处继续</div>
+        <div style="position:absolute;bottom:30px;font-size:0.65rem;opacity:0.3;text-align:center;font-family:'Inter',sans-serif;">
             <div>© 2026 XJQ · Designed by Xin Junqian</div>
         </div>
     </div>
@@ -3465,18 +3466,13 @@
             updateUI();
             renderBankList();
             
-            // 首次进入或新版本检测
-            const firstVisit = localStorage.getItem('firstVisit');
+            // 版本检测：每次代码更新都显示欢迎动画
             const currentVersion = '2.3.0';
             const lastVersion = localStorage.getItem('lastVersionSeen');
             
-            if (!firstVisit) {
-                // 首次进入：播放欢迎动画
+            if (lastVersion !== currentVersion) {
+                // 有新版本或首次进入：播放欢迎动画
                 showWelcomeAnimation();
-                localStorage.setItem('firstVisit', 'true');
-            } else if (lastVersion !== currentVersion) {
-                // 非首次但有新版本：直接弹出版本更新
-                showModal(changelogModal);
                 localStorage.setItem('lastVersionSeen', currentVersion);
             }
         }
@@ -5648,21 +5644,35 @@
         };
 
         // ===== 欢迎动画 + 引导流程 =====
+        let welcomeTimer = null;
+        
         function showWelcomeAnimation() {
             const screen = document.getElementById('welcomeScreen');
             const text = document.getElementById('welcomeText');
             const sub = document.getElementById('welcomeSub');
+            const hint = document.getElementById('welcomeHint');
             
             setTimeout(() => { text.style.opacity = '1'; text.style.transform = 'translateY(0)'; }, 300);
             setTimeout(() => { sub.style.opacity = '1'; }, 800);
+            setTimeout(() => { if (hint) hint.style.opacity = '1'; }, 1000);
             
+            welcomeTimer = setTimeout(() => {
+                finishWelcome();
+            }, 4000);
+        }
+        
+        function skipWelcome() {
+            if (welcomeTimer) clearTimeout(welcomeTimer);
+            finishWelcome();
+        }
+        
+        function finishWelcome() {
+            const screen = document.getElementById('welcomeScreen');
+            screen.style.opacity = '0';
             setTimeout(() => {
-                screen.style.opacity = '0';
-                setTimeout(() => {
-                    screen.style.display = 'none';
-                    startGuide();
-                }, 800);
-            }, 3000);
+                screen.style.display = 'none';
+                startGuide();
+            }, 800);
         }
 
         let guideStep = 0;
@@ -5745,12 +5755,8 @@
         function finishGuide() {
             document.getElementById('guideHighlight').style.display = 'none';
             document.getElementById('guideCard').style.display = 'none';
-            const currentVersion = '2.3.0';
-            const lastVersion = localStorage.getItem('lastVersionSeen');
-            if (lastVersion !== currentVersion) {
-                showModal(changelogModal);
-                localStorage.setItem('lastVersionSeen', currentVersion);
-            }
+            // 引导完成后弹出版本更新说明
+            showModal(changelogModal);
         }
 
         // ===== 题库查看器 =====
