@@ -2233,6 +2233,161 @@
         .feedback-card.incorrect.show {
             animation: fadeIn 0.3s ease, pulseIncorrect 0.5s ease 0.3s;
         }
+
+        /* ===== 手机端全面适配 ===== */
+        @media (max-width: 768px) {
+            /* 首页统计卡片 */
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px !important;
+            }
+            .stat-card {
+                padding: 12px !important;
+                min-height: auto !important;
+            }
+            .stat-card .stat-icon {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 1rem !important;
+                margin-bottom: 8px !important;
+            }
+            .stat-card .stat-value {
+                font-size: 1.2rem !important;
+            }
+            .stat-card .stat-label {
+                font-size: 0.75rem !important;
+            }
+
+            /* 首页卡片 */
+            #dashboard .card {
+                padding: 16px !important;
+                margin-bottom: 12px !important;
+            }
+            #dashboard h2 {
+                font-size: 1rem !important;
+                margin-bottom: 12px !important;
+            }
+
+            /* 快速开始按钮 */
+            .flex.gap-3.flex-wrap {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+            .flex.gap-3.flex-wrap .btn {
+                width: 100% !important;
+                padding: 10px 16px !important;
+                font-size: 0.85rem !important;
+                justify-content: center !important;
+            }
+
+            /* 学习进度 */
+            #dashboard .grid.grid-cols-3 {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+            }
+            #dashboard .grid.grid-cols-3 .stat-value {
+                font-size: 1rem !important;
+            }
+            #dashboard .grid.grid-cols-3 .stat-label {
+                font-size: 0.7rem !important;
+            }
+
+            /* 数据管理页 */
+            #dataManagement > div:first-of-type {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+            #dataManagement .card {
+                padding: 16px !important;
+            }
+            #dataManagement h3 {
+                font-size: 0.9rem !important;
+            }
+            #dataManagement .drop-zone {
+                padding: 16px !important;
+                min-height: auto !important;
+            }
+            #dataManagement .drop-zone i {
+                font-size: 1.5rem !important;
+            }
+            #dataManagement .drop-zone h3 {
+                font-size: 0.8rem !important;
+            }
+            #dataManagement .btn {
+                padding: 8px 12px !important;
+                font-size: 0.8rem !important;
+            }
+            #dataManagement .grid.grid-cols-4,
+            #dataManagement > div:last-of-type > div {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+            #dataManagement .text-center div:first-child {
+                font-size: 1.2rem !important;
+            }
+
+            /* 导入选项checkbox */
+            #dataManagement label {
+                font-size: 0.75rem !important;
+                padding: 6px 8px !important;
+            }
+
+            /* 查看器弹窗 */
+            #viewerModal .modal {
+                max-width: 100vw !important;
+                max-height: 90vh !important;
+                margin: 10px !important;
+                border-radius: 12px !important;
+            }
+            #viewerModal .modal > div:last-child {
+                flex-direction: column !important;
+            }
+            #viewerModal .modal > div:last-child > div:first-child {
+                width: 100% !important;
+                max-height: 120px !important;
+                border-right: none !important;
+                border-bottom: 1px solid var(--gray-100) !important;
+                display: flex !important;
+                overflow-x: auto !important;
+                overflow-y: hidden !important;
+                gap: 4px !important;
+                padding: 8px !important;
+            }
+            #viewerModal .modal > div:last-child > div:first-child > div {
+                white-space: nowrap !important;
+                padding: 6px 12px !important;
+                font-size: 0.7rem !important;
+                flex-shrink: 0 !important;
+                border-radius: 16px !important;
+            }
+            #viewerModal .modal > div:last-child > div:last-child {
+                min-height: 300px !important;
+            }
+            #viewerModal #viewerQuestionList > div {
+                padding: 10px !important;
+                font-size: 0.8rem !important;
+            }
+
+            /* 题库列表 */
+            #bankListCard .bank-item {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 10px !important;
+            }
+            #bankListCard .bank-item > div:last-child {
+                width: 100% !important;
+                justify-content: flex-end !important;
+            }
+
+            /* 错题本 */
+            .wrong-questions-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+            .wrong-question-card {
+                padding: 14px !important;
+            }
+        }
     </style>
 </head>
 <body>
