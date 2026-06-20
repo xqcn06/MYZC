@@ -6514,18 +6514,21 @@
             // 渲染段落
             const passageEl = document.getElementById('clozePassage');
             let html = passage.content;
+
+            // 英语学习模式：先处理纯文本段落（在blank标记替换之前）
+            if (settings.englishMode === 'translation') {
+                html = wrapSentencesForTranslation(html);
+            }
+            if (settings.englishMode === 'definition') {
+                html = wrapWordsForDefinition(html);
+            }
+
+            // 替换blank标记为HTML（替换顺序在英语模式之后，避免被破坏）
             for (let n = 1; n <= 10; n++) {
                 const regex = new RegExp(`\\{blank:${n}\\}`, 'g');
                 html = html.replace(regex, `<span class="cloze-blank" data-num="${n}" onclick="clickClozeBlank(${n})"><span class="blank-num">${n}</span></span>`);
             }
-            // 如果开启了句子翻译模式，给句子加点击事件
-            if (settings.englishMode === 'translation') {
-                html = wrapSentencesForTranslation(html);
-            }
-            // 如果开启了单词释义模式，给段落中的单词加点击事件
-            if (settings.englishMode === 'definition') {
-                html = wrapWordsForDefinition(html);
-            }
+
             passageEl.innerHTML = html;
 
             // 渲染词库
