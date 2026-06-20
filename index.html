@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>考试自测系统</title>
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="考试自测">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=ZCOOL+XiaoWei&family=Inter:wght@300;400;600&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     <style>
@@ -2880,6 +2886,26 @@
                     </div>
                     <div class="changelog-version">
                         <h3><i class="fas fa-star text-warning"></i> v2.4.0</h3>
+                        <div class="changelog-date">发布日期: 2026-06-20</div>
+                        
+                        <div class="changelog-section">
+                            <h4><i class="fas fa-plus-circle text-success"></i> 新功能</h4>
+                            <ul>
+                                <li><strong>15选10练习模式</strong>: 自动识别导入的15选10题库，支持点击空白选词填空</li>
+                                <li><strong>英语学习模式</strong>: 设置中开启后，支持单词释义（点击查看中英释义）和句子翻译（点击查看中文翻译）</li>
+                                <li><strong>在线词典</strong>: 使用Free Dictionary API + MyMemory翻译API，释义自动翻译为中文</li>
+                            </ul>
+                        </div>
+
+                        <div class="changelog-section">
+                            <h4><i class="fas fa-arrow-up text-primary"></i> 功能增强</h4>
+                            <ul>
+                                <li><strong>翻译缓存</strong>: 查询结果自动缓存到本地，避免重复请求</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="changelog-version">
+                        <h3><i class="fas fa-star text-warning"></i> v2.3.0</h3>
                         <div class="changelog-date">发布日期: 2026-06-15</div>
                         
                         <div class="changelog-section">
@@ -6847,6 +6873,11 @@
             if (clozeIndex < clozeData.length - 1) { clozeIndex++; renderCloze(); }
         });
         document.getElementById('clozeCheckBtn')?.addEventListener('click', checkCloze);
+
+        // PWA Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
 
     </script>
 </body>
