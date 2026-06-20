@@ -869,6 +869,27 @@
             flex-shrink: 0;
             transition: var(--transition);
         }
+        .option-help-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(102,126,234,0.08);
+            color: #667eea;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-left: 8px;
+            flex-shrink: 0;
+            vertical-align: middle;
+            transition: all 0.2s ease;
+        }
+        .option-help-btn:hover {
+            background: rgba(102,126,234,0.18);
+            transform: scale(1.1);
+        }
 
         .option.selected .option-index {
             background: var(--primary);
@@ -4618,11 +4639,38 @@
                     optionIndex.textContent = letters[idx];
                     
                     const optionText = document.createElement('div');
+                    optionText.style.cssText = 'display:flex;align-items:center;flex:1;min-width:0;';
                     const optTextContent = `${letters[idx]}. ${question.options[key]}`;
+                    const optEnglish = question.options[key];
+
                     if (settings.englishMode === 'definition') {
-                        optionText.innerHTML = wrapWordsForDefinition(optTextContent);
+                        const textSpan = document.createElement('span');
+                        textSpan.innerHTML = wrapWordsForDefinition(optTextContent);
+                        textSpan.style.cssText = 'flex:1;min-width:0;';
+                        optionText.appendChild(textSpan);
+                        const helpBtn = document.createElement('span');
+                        helpBtn.className = 'option-help-btn';
+                        helpBtn.textContent = '?';
+                        helpBtn.title = '查看释义';
+                        helpBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            showWordDef(optEnglish.split(' ')[0].toLowerCase(), helpBtn);
+                        };
+                        optionText.appendChild(helpBtn);
                     } else if (settings.englishMode === 'translation') {
-                        optionText.innerHTML = wrapSentencesForTranslation(optTextContent);
+                        const textSpan = document.createElement('span');
+                        textSpan.textContent = optTextContent;
+                        textSpan.style.cssText = 'flex:1;min-width:0;';
+                        optionText.appendChild(textSpan);
+                        const helpBtn = document.createElement('span');
+                        helpBtn.className = 'option-help-btn';
+                        helpBtn.innerHTML = '<i class="fas fa-language" style="font-size:0.6rem;"></i>';
+                        helpBtn.title = '查看翻译';
+                        helpBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            showSentenceTranslation(optEnglish, helpBtn);
+                        };
+                        optionText.appendChild(helpBtn);
                     } else {
                         optionText.textContent = optTextContent;
                     }
