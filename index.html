@@ -6850,13 +6850,12 @@
         function wrapWordsForDefinition(html) {
             // 给段落中的英文单词添加点击事件（跳过blank标记和HTML标签）
             return html.replace(/\b([a-zA-Z]{3,})\b/g, (match, word, offset) => {
-                // 跳过blank标记 {blank:N}
-                const before = html.substring(Math.max(0, offset - 10), offset);
-                if (before.includes('{blank:') || before.includes('blank:')) return match;
+                // 跳过blank标记 {blank:N} - 检查前一个字符是否为 {
+                if (offset > 0 && html[offset - 1] === '{') return match;
                 // 跳过HTML标签内的内容
-                const beforeLong = html.substring(Math.max(0, offset - 50), offset);
-                if (beforeLong.includes('<span') || beforeLong.includes('</span>')) return match;
-                if (beforeLong.includes('blank-num')) return match;
+                const before = html.substring(Math.max(0, offset - 50), offset);
+                if (before.includes('<span') || before.includes('</span>')) return match;
+                if (before.includes('blank-num')) return match;
                 return `<span class="cloze-sentence" onclick="event.stopPropagation();showWordDef('${word.toLowerCase()}', this)" style="cursor:pointer;border-bottom:1px dotted rgba(102,126,234,0.3);">${match}</span>`;
             });
         }
