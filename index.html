@@ -1541,6 +1541,190 @@
             }
         }
 
+        /* ===== 15选10练习样式 ===== */
+        .cloze-passage {
+            font-size: 1rem;
+            line-height: 2;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(102,126,234,0.03), rgba(118,75,162,0.03));
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+            word-spacing: 2px;
+        }
+        .cloze-blank {
+            display: inline-block;
+            min-width: 110px;
+            height: 32px;
+            border-bottom: 2px dashed #667eea;
+            text-align: center;
+            cursor: pointer;
+            vertical-align: bottom;
+            margin: 0 4px;
+            padding: 0 8px;
+            font-weight: 600;
+            color: #667eea;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            position: relative;
+            line-height: 32px;
+        }
+        .cloze-blank:hover {
+            background: rgba(102,126,234,0.08);
+        }
+        .cloze-blank.active {
+            background: rgba(102,126,234,0.15);
+            border-bottom-color: #764ba2;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.2);
+        }
+        .cloze-blank.filled {
+            color: #27ae60;
+            border-bottom-color: #27ae60;
+        }
+        .cloze-blank.correct {
+            color: #27ae60;
+            border-bottom-color: #27ae60;
+            background: rgba(39,174,96,0.1);
+        }
+        .cloze-blank.incorrect {
+            color: #e74c3c;
+            border-bottom-color: #e74c3c;
+            background: rgba(231,76,60,0.1);
+        }
+        .cloze-blank .blank-num {
+            position: absolute;
+            top: -20px;
+            left: 2px;
+            font-size: 0.7rem;
+            color: #667eea;
+            font-weight: normal;
+            background: transparent;
+            padding: 0;
+        }
+        .cloze-wordbank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            margin-bottom: 20px;
+        }
+        .cloze-wordbank-title {
+            width: 100%;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+        .cloze-word {
+            padding: 8px 16px;
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .cloze-word:hover {
+            border-color: #667eea;
+            background: rgba(102,126,234,0.05);
+            transform: translateY(-1px);
+        }
+        .cloze-word.used {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+            color: var(--gray-400);
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        .cloze-word.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        .cloze-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        /* ===== 英语学习浮层 ===== */
+        .english-tooltip {
+            position: fixed;
+            z-index: 9999;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
+            padding: 16px;
+            max-width: 360px;
+            min-width: 220px;
+            display: none;
+            animation: fadeIn 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .english-tooltip.show {
+            display: block;
+        }
+        .tooltip-word {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+        .tooltip-phonetic {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+        }
+        .tooltip-pos {
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(102,126,234,0.1);
+            color: #667eea;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .tooltip-def {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+        .tooltip-loading {
+            text-align: center;
+            color: var(--gray-500);
+            padding: 12px;
+        }
+        .tooltip-loading i {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .cloze-sentence {
+            cursor: pointer;
+            transition: background 0.2s ease;
+            border-radius: 4px;
+            padding: 0 2px;
+        }
+        .cloze-sentence:hover {
+            background: rgba(102,126,234,0.08);
+        }
+
         /* ===== 工具类 ===== */
         .hidden {
             display: none !important;
@@ -2418,6 +2602,20 @@
         }
     </style>
 
+    <!-- 英语学习浮层 -->
+    <div class="english-tooltip" id="englishTooltip">
+        <div class="tooltip-loading" id="tooltipLoading"><i class="fas fa-spinner"></i> 查询中...</div>
+        <div id="tooltipContent" style="display:none;">
+            <div class="tooltip-word" id="tooltipWord"></div>
+            <div class="tooltip-phonetic" id="tooltipPhonetic"></div>
+            <div id="tooltipDefs"></div>
+        </div>
+        <div id="tooltipTranslation" style="display:none;">
+            <div style="font-size:0.8rem;color:var(--gray-500);margin-bottom:4px;">翻译</div>
+            <div class="tooltip-def" id="tooltipTransText"></div>
+        </div>
+    </div>
+
     <!-- 引导聚焦层 -->
     <div id="guideHighlight" style="display:none;position:fixed;z-index:9999;border:3px solid #667eea;border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,0.45);pointer-events:none;transition:all 0.5s ease;"></div>
     
@@ -2633,6 +2831,17 @@
                             <option value="3" selected>做对3次后移除</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="englishMode">
+                            <i class="fas fa-language"></i> 英语学习模式
+                        </label>
+                        <select id="englishMode">
+                            <option value="off" selected>关闭</option>
+                            <option value="definition">单词释义（点击查看释义）</option>
+                            <option value="translation">句子翻译（点击查看翻译）</option>
+                        </select>
+                        <small class="text-muted">开启后可点击英文内容查看释义或翻译</small>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -2659,7 +2868,27 @@
             <div class="modal-body">
                 <div class="changelog-content">
                     <div class="changelog-version">
-                        <h3><i class="fas fa-star text-warning"></i> v2.3.0 (当前版本)</h3>
+                        <h3><i class="fas fa-star text-warning"></i> v2.4.0 (当前版本)</h3>
+                        <div class="changelog-date">发布日期: 2026-06-20</div>
+                        
+                        <div class="changelog-section">
+                            <h4><i class="fas fa-plus-circle text-success"></i> 新功能</h4>
+                            <ul>
+                                <li><strong>15选10练习模式</strong>: 自动识别导入的15选10题库，支持点击空白选词填空</li>
+                                <li><strong>英语学习模式</strong>: 设置中开启后，支持单词释义（点击查看中英释义）和句子翻译（点击查看中文翻译）</li>
+                                <li><strong>在线词典</strong>: 使用Free Dictionary API + MyMemory翻译API，释义自动翻译为中文</li>
+                            </ul>
+                        </div>
+
+                        <div class="changelog-section">
+                            <h4><i class="fas fa-arrow-up text-primary"></i> 功能增强</h4>
+                            <ul>
+                                <li><strong>翻译缓存</strong>: 查询结果自动缓存到本地，避免重复请求</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="changelog-version">
+                        <h3><i class="fas fa-star text-warning"></i> v2.3.0</h3>
                         <div class="changelog-date">发布日期: 2026-06-15</div>
                         
                         <div class="changelog-section">
@@ -2857,7 +3086,7 @@
                     </a>
                     <a href="#" class="sidebar-link" id="showChangelogBtn">
                         <i class="fas fa-code-branch"></i> <span class="link-text">版本更新</span>
-                        <span class="badge" style="background: var(--success);">v2.3.0</span>
+                        <span class="badge" style="background: var(--success);">v2.4.0</span>
                     </a>
                 </div>
             </div>
@@ -2991,12 +3220,12 @@
         
         <!-- 开始练习 -->
         <div class="tab-content" id="practice">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--gray-100);">
-                <div style="display:flex;align-items:center;gap:12px;">
-                    <div style="font-size:0.95rem;font-weight:600;color:var(--gray-800);">第 <span id="currentQuestionNumber" style="color:#667eea;">1</span> / <span id="totalQuestionCount">0</span> 题</div>
-                    <div id="questionTypeLabel" style="padding:4px 10px;background:rgba(102,126,234,0.1);color:#667eea;border-radius:12px;font-size:0.75rem;font-weight:600;">单选题</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--gray-100);flex-wrap:nowrap;gap:8px;">
+                <div style="display:flex;align-items:center;gap:12px;min-width:0;flex-shrink:1;overflow:hidden;">
+                    <div style="font-size:0.95rem;font-weight:600;color:var(--gray-800);white-space:nowrap;">第 <span id="currentQuestionNumber" style="color:#667eea;">1</span> / <span id="totalQuestionCount">0</span> 题</div>
+                    <div id="questionTypeLabel" style="padding:4px 10px;background:rgba(102,126,234,0.1);color:#667eea;border-radius:12px;font-size:0.75rem;font-weight:600;white-space:nowrap;">单选题</div>
                 </div>
-                <button class="btn btn-outline" id="openSettingsBtn" style="padding:6px 12px;font-size:0.8rem;">
+                <button class="btn btn-outline" id="openSettingsBtn" style="padding:6px 12px;font-size:0.8rem;flex-shrink:0;white-space:nowrap;">
                     <i class="fas fa-sliders"></i> 设置
                 </button>
             </div>
@@ -3042,6 +3271,43 @@
                 </div>
             </div>
             
+            <!-- 15选10专用练习区 -->
+            <div id="clozeContent" style="display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--gray-100);">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div style="font-size:0.95rem;font-weight:600;color:var(--gray-800);">第 <span id="clozeCurrentNum" style="color:#667eea;">1</span> / <span id="clozeTotalNum">0</span> 篇</div>
+                        <div style="padding:4px 10px;background:rgba(16,185,129,0.1);color:#10b981;border-radius:12px;font-size:0.75rem;font-weight:600;">15选10</div>
+                    </div>
+                    <button class="btn btn-outline" onclick="openSettingsBtn.click()" style="padding:6px 12px;font-size:0.8rem;">
+                        <i class="fas fa-sliders"></i> 设置
+                    </button>
+                </div>
+                <div id="clozePassage" class="cloze-passage"></div>
+                <div id="clozeWordBank" class="cloze-wordbank"></div>
+                <div class="feedback-card" id="clozeFeedback" style="margin-top:16px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div id="clozeFeedbackIcon" style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;"></div>
+                        <div style="flex:1;">
+                            <div id="clozeFeedbackTitle" style="font-size:0.9rem;font-weight:700;margin-bottom:2px;"></div>
+                            <div id="clozeFeedbackText" style="font-size:0.8rem;color:var(--gray-600);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cloze-nav">
+                    <button class="nav-btn prev" id="clozePrevBtn" disabled style="padding:8px 16px;border:none;border-radius:8px;font-weight:600;font-size:0.85rem;cursor:pointer;background:var(--gray-100);color:var(--gray-700);display:flex;align-items:center;gap:6px;">
+                        <i class="fas fa-chevron-left"></i> 上一篇
+                    </button>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn show-answer" id="clozeCheckBtn" style="padding:8px 16px;border:none;border-radius:8px;font-weight:600;font-size:0.85rem;cursor:pointer;background:rgba(102,126,234,0.1);color:#667eea;display:flex;align-items:center;gap:6px;">
+                            <i class="fas fa-lightbulb"></i> 检查
+                        </button>
+                        <button class="nav-btn next" id="clozeNextBtn" style="padding:8px 16px;border:none;border-radius:8px;font-weight:600;font-size:0.85rem;cursor:pointer;background:var(--gradient-primary);color:white;display:flex;align-items:center;gap:6px;">
+                            下一篇 <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div id="noQuestionsMessage" style="text-align:center;padding:50px 20px;">
                 <i class="fas fa-book-open" style="font-size:3rem;color:var(--gray-300);"></i>
                 <h3 style="margin-top:12px;font-size:1.1rem;color:var(--gray-600);">暂无题目</h3>
@@ -3271,11 +3537,11 @@
             
             <div class="footer-bottom">
                 <div class="footer-bottom-left">
-                    <p>&copy; 2026 XJQ · 考试自测系统 v2.3.0</p>
+                    <p>&copy; 2026 XJQ · 考试自测系统 v2.4.0</p>
                     <p>仅供学习使用 · 数据存储在浏览器本地</p>
                 </div>
                 <div class="footer-bottom-right">
-                    <span class="footer-version-badge">v2.3.0</span>
+                    <span class="footer-version-badge">v2.4.0</span>
                 </div>
             </div>
         </div>
@@ -3478,6 +3744,13 @@
             updateChapterSelect();
             updateUI();
             renderBankList();
+
+            // 加载英语学习模式设置
+            loadEnglishCache();
+            const emSelect = document.getElementById('englishMode');
+            if (emSelect && settings.englishMode) {
+                emSelect.value = settings.englishMode;
+            }
             
             // 首次进入显示欢迎动画
             let visited = null;
@@ -3489,7 +3762,7 @@
             }
             
             // 版本更新自动弹出
-            const currentVersion = '2.3.0';
+            const currentVersion = '2.4.0';
             let lastSeenVersion = null;
             try { lastSeenVersion = localStorage.getItem('ver'); } catch(e) {}
             
@@ -3841,13 +4114,28 @@
                         updateWrongQuestionsList();
                         break;
                     case 'practice':
-                        if (questionBank.length === 0) {
+                        const clozeContent = document.getElementById('clozeContent');
+                        const practiceHeader = document.querySelector('#practice > div:first-child');
+                        const practiceProgressWrap = document.querySelector('#practice > div:nth-child(2)');
+                        if (isCloze15Bank()) {
                             questionContent.style.display = 'none';
-                            noQuestionsMessage.style.display = 'block';
-                        } else {
                             noQuestionsMessage.style.display = 'none';
-                            if (currentQuestions.length === 0) {
-                                startPractice();
+                            clozeContent.style.display = 'block';
+                            if (practiceHeader) practiceHeader.style.display = 'none';
+                            if (practiceProgressWrap) practiceProgressWrap.style.display = 'none';
+                            initClozePractice();
+                        } else {
+                            clozeContent.style.display = 'none';
+                            if (practiceHeader) practiceHeader.style.display = 'flex';
+                            if (practiceProgressWrap) practiceProgressWrap.style.display = '';
+                            if (questionBank.length === 0) {
+                                questionContent.style.display = 'none';
+                                noQuestionsMessage.style.display = 'block';
+                            } else {
+                                noQuestionsMessage.style.display = 'none';
+                                if (currentQuestions.length === 0) {
+                                    startPractice();
+                                }
                             }
                         }
                         break;
@@ -3902,7 +4190,7 @@
         // 首次访问时显示更新说明
         function checkFirstVisitWithNewVersion() {
             const lastVersion = localStorage.getItem('lastVersionSeen');
-            const currentVersion = '2.3.0';
+            const currentVersion = '2.4.0';
             
             // 检查是否是第一次访问当前版本
             if (!lastVersion || lastVersion !== currentVersion) {
@@ -3981,6 +4269,35 @@
                     
                     if (!Array.isArray(data)) {
                         showToast('题库文件格式不正确，应为JSON数组', 'error');
+                        return;
+                    }
+
+                    // 检查是否为15选10题库
+                    if (data.length > 0 && data[0].passage_type === 'cloze15') {
+                        const bank = {
+                            id: 'bank_' + Date.now(),
+                            name: file.name.replace('.json', ''),
+                            importDate: new Date().toISOString(),
+                            data: [],
+                            type: 'cloze15',
+                            clozeData: [],
+                            stats: { totalAnswered:0, totalCorrect:0, todayAnswered:0, todayCorrect:0, streakDays:0, lastStudyDate:null },
+                            wrongQuestions: [],
+                            userAnswers: {},
+                            lastSession: null
+                        };
+                        data.forEach(ch => {
+                            if (ch.passages) bank.clozeData.push(...ch.passages);
+                        });
+                        bank.name = (bank.clozeData[0]?.title || '15选10') + ' 等' + bank.clozeData.length + '篇';
+                        questionBanks.push(bank);
+                        activeBankId = bank.id;
+                        currentBank = bank;
+                        saveAllData();
+                        syncFromBank();
+                        renderBankList();
+                        updateStats();
+                        showToast(`已导入15选10题库: ${bank.clozeData.length}篇文章`, 'success');
                         return;
                     }
                     
@@ -4182,6 +4499,14 @@
             }
             
             questionText.textContent = question.question;
+
+            // 英语学习模式：给题目文字添加点击事件
+            if (settings.englishMode === 'definition') {
+                questionText.innerHTML = wrapWordsForDefinition(questionText.textContent);
+            } else if (settings.englishMode === 'translation') {
+                questionText.innerHTML = wrapSentencesForTranslation(questionText.textContent);
+            }
+
             optionsContainer.innerHTML = '';
             
             if (question.type === 'judgment') {
@@ -4263,7 +4588,14 @@
                     optionIndex.textContent = letters[idx];
                     
                     const optionText = document.createElement('div');
-                    optionText.textContent = `${letters[idx]}. ${question.options[key]}`;
+                    const optTextContent = `${letters[idx]}. ${question.options[key]}`;
+                    if (settings.englishMode === 'definition') {
+                        optionText.innerHTML = wrapWordsForDefinition(optTextContent);
+                    } else if (settings.englishMode === 'translation') {
+                        optionText.innerHTML = wrapSentencesForTranslation(optTextContent);
+                    } else {
+                        optionText.textContent = optTextContent;
+                    }
                     
                     option.appendChild(optionIndex);
                     option.appendChild(optionText);
@@ -5183,8 +5515,9 @@
                 autoCheck: document.getElementById('autoCheck').value,
                 wrongThreshold: parseInt(document.getElementById('wrongThreshold').value),
                 autoNextOnCorrect: document.getElementById('autoNextOnCorrect').value,
-                shuffleOptions: document.getElementById('shuffleOptions').value, // 添加这行
-                mobileVibrate: document.getElementById('mobileVibrate')?.value || 'disabled'
+                shuffleOptions: document.getElementById('shuffleOptions').value,
+                mobileVibrate: document.getElementById('mobileVibrate')?.value || 'disabled',
+                englishMode: document.getElementById('englishMode')?.value || 'off'
             };
             
             // 更新全局变量
@@ -5971,7 +6304,7 @@
             <span>数据</span>
         </a>
         <div class="mobile-copyright" id="mobileCopyright">
-            <span id="copyrightText">© 2026 XJQ · 考试自测系统 v2.3.0</span>
+            <span id="copyrightText">© 2026 XJQ · 考试自测系统 v2.4.0</span>
         </div>
     </nav>
     
@@ -6105,7 +6438,7 @@
             if (!c || !b || !t) return;
             var hideTimer;
             var carouselTimer = null;
-            var texts = ['© 2026 XJQ · 考试自测系统 v2.3.0', 'Designed & Developed by Xin Junqian'];
+            var texts = ['© 2026 XJQ · 考试自测系统 v2.4.0', 'Designed & Developed by Xin Junqian'];
             var idx = 0;
             
             function rotate() {
@@ -6131,6 +6464,404 @@
             b.addEventListener('click', show);
             setTimeout(show, 500);
         })();
+
+        // ===== 15选10练习模块 =====
+        let clozeData = [];
+        let clozeIndex = 0;
+        let clozeAnswers = {};
+        let clozeActiveBlank = -1;
+        let clozeUsedWords = [];
+        let clozeChecked = false;
+
+        function isCloze15Bank() {
+            return currentBank && currentBank.type === 'cloze15';
+        }
+
+        function initClozePractice() {
+            clozeData = currentBank.clozeData || [];
+            clozeIndex = 0;
+            if (clozeData.length > 0) renderCloze();
+        }
+
+        function renderCloze() {
+            if (clozeIndex >= clozeData.length) {
+                showToast('所有文章已完成！', 'success');
+                return;
+            }
+            const passage = clozeData[clozeIndex];
+            clozeAnswers = {};
+            clozeUsedWords = [];
+            clozeActiveBlank = -1;
+            clozeChecked = false;
+
+            document.getElementById('clozeCurrentNum').textContent = clozeIndex + 1;
+            document.getElementById('clozeTotalNum').textContent = clozeData.length;
+            document.getElementById('clozePrevBtn').disabled = clozeIndex === 0;
+
+            // 渲染段落
+            const passageEl = document.getElementById('clozePassage');
+            let html = passage.content;
+            for (let n = 1; n <= 10; n++) {
+                const regex = new RegExp(`\\{blank:${n}\\}`, 'g');
+                html = html.replace(regex, `<span class="cloze-blank" data-num="${n}" onclick="clickClozeBlank(${n})"><span class="blank-num">${n}</span></span>`);
+            }
+            // 如果开启了句子翻译模式，给句子加点击事件
+            if (settings.englishMode === 'translation') {
+                html = wrapSentencesForTranslation(html);
+            }
+            // 如果开启了单词释义模式，给段落中的单词加点击事件
+            if (settings.englishMode === 'definition') {
+                html = wrapWordsForDefinition(html);
+            }
+            passageEl.innerHTML = html;
+
+            // 渲染词库
+            renderClozeWordBank(passage);
+
+            // 隐藏反馈
+            document.getElementById('clozeFeedback').className = 'feedback-card';
+        }
+
+        function renderClozeWordBank(passage) {
+            const bankEl = document.getElementById('clozeWordBank');
+            const isDefMode = settings.englishMode === 'definition';
+
+            let html = '<div class="cloze-wordbank-title"><i class="fas fa-book"></i> 备选词库 (' + passage.word_bank.length + '词)' + (isDefMode ? ' <span style="font-weight:normal;color:var(--gray-400);font-size:0.75rem;">点击选词，点?查释义</span>' : '') + '</div>';
+            passage.word_bank.forEach((word, idx) => {
+                const isUsed = clozeUsedWords.includes(word);
+                const cls = isUsed ? 'cloze-word used' : 'cloze-word';
+                html += `<div class="${cls}" data-word="${word}" onclick="clickClozeWord('${word.replace(/'/g, "\\'")}')">`;
+                html += word;
+                if (isDefMode) {
+                    html += `<span onclick="event.stopPropagation();showWordDef('${word.replace(/'/g, "\\'")}', this.parentElement)" style="margin-left:6px;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:rgba(102,126,234,0.1);color:#667eea;font-size:0.7rem;cursor:pointer;flex-shrink:0;" title="查看释义">?</span>`;
+                }
+                html += '</div>';
+            });
+            bankEl.innerHTML = html;
+        }
+
+        function clickClozeBlank(num) {
+            if (clozeChecked) return;
+
+            // 如果点击已填的空白，取消选择
+            if (clozeAnswers[num]) {
+                const word = clozeAnswers[num];
+                delete clozeAnswers[num];
+                clozeUsedWords = clozeUsedWords.filter(w => w !== word);
+                const blankEl = document.querySelector(`.cloze-blank[data-num="${num}"]`);
+                blankEl.innerHTML = `<span class="blank-num">${num}</span>`;
+                blankEl.classList.remove('filled', 'active');
+                renderClozeWordBank(clozeData[clozeIndex]);
+                return;
+            }
+
+            // 高亮当前空白
+            document.querySelectorAll('.cloze-blank').forEach(b => b.classList.remove('active'));
+            const blankEl = document.querySelector(`.cloze-blank[data-num="${num}"]`);
+            blankEl.classList.add('active');
+            clozeActiveBlank = num;
+        }
+
+        function clickClozeWord(word) {
+            if (clozeChecked) return;
+            if (clozeActiveBlank === -1) {
+                showToast('请先点击文章中的空白处', 'warning');
+                return;
+            }
+            if (clozeUsedWords.includes(word)) return;
+
+            // 取消之前的词（如果当前空白已有词）
+            if (clozeAnswers[clozeActiveBlank]) {
+                const prev = clozeAnswers[clozeActiveBlank];
+                clozeUsedWords = clozeUsedWords.filter(w => w !== prev);
+            }
+
+            clozeAnswers[clozeActiveBlank] = word;
+            if (!clozeUsedWords.includes(word)) clozeUsedWords.push(word);
+
+            // 更新空白显示
+            const blankEl = document.querySelector(`.cloze-blank[data-num="${clozeActiveBlank}"]`);
+            blankEl.innerHTML = `<span class="blank-num">${clozeActiveBlank}</span>${word}`;
+            blankEl.classList.add('filled');
+            blankEl.classList.remove('active');
+
+            // 自动跳到下一个空
+            const nextBlank = findNextEmptyBlank(clozeActiveBlank);
+            if (nextBlank !== -1) {
+                clozeActiveBlank = nextBlank;
+                document.querySelector(`.cloze-blank[data-num="${nextBlank}"]`).classList.add('active');
+            } else {
+                clozeActiveBlank = -1;
+            }
+
+            renderClozeWordBank(clozeData[clozeIndex]);
+        }
+
+        function checkCloze() {
+            if (Object.keys(clozeAnswers).length < 10) {
+                showToast('请先填写所有空白', 'warning');
+                return;
+            }
+            clozeChecked = true;
+            const passage = clozeData[clozeIndex];
+            let correct = 0;
+
+            for (let n = 1; n <= 10; n++) {
+                const blankEl = document.querySelector(`.cloze-blank[data-num="${n}"]`);
+                const userAns = (clozeAnswers[n] || '').toLowerCase();
+                const correctAns = (passage.answers[n] || '').toLowerCase();
+                if (userAns === correctAns) {
+                    blankEl.classList.add('correct');
+                    blankEl.classList.remove('incorrect');
+                    correct++;
+                } else {
+                    blankEl.classList.add('incorrect');
+                    blankEl.classList.remove('correct');
+                }
+            }
+
+            const feedback = document.getElementById('clozeFeedback');
+            const icon = document.getElementById('clozeFeedbackIcon');
+            const title = document.getElementById('clozeFeedbackTitle');
+            const text = document.getElementById('clozeFeedbackText');
+
+            if (correct === 10) {
+                feedback.className = 'feedback-card correct show';
+                icon.innerHTML = '<i class="fas fa-check-circle" style="color:var(--success);"></i>';
+                title.textContent = '全部正确！太棒了！';
+                title.style.color = 'var(--success)';
+                text.textContent = '';
+            } else {
+                feedback.className = 'feedback-card incorrect show';
+                icon.innerHTML = '<i class="fas fa-times-circle" style="color:var(--danger);"></i>';
+                title.textContent = `答对 ${correct}/10 题`;
+                title.style.color = 'var(--danger)';
+                let wrongList = [];
+                for (let n = 1; n <= 10; n++) {
+                    const userAns = (clozeAnswers[n] || '').toLowerCase();
+                    const correctAns = (passage.answers[n] || '').toLowerCase();
+                    if (userAns !== correctAns) {
+                        wrongList.push(`${n}. ${passage.answers[n]}`);
+                    }
+                }
+                text.innerHTML = '正确答案: ' + wrongList.join(', ');
+            }
+        }
+
+        // ===== 英语学习API =====
+        let wordDefCache = {};
+        let translationCache = {};
+
+        function loadEnglishCache() {
+            try {
+                wordDefCache = JSON.parse(localStorage.getItem('wordDefCache') || '{}');
+                translationCache = JSON.parse(localStorage.getItem('translationCache') || '{}');
+            } catch(e) {}
+        }
+
+        function saveEnglishCache() {
+            localStorage.setItem('wordDefCache', JSON.stringify(wordDefCache));
+            localStorage.setItem('translationCache', JSON.stringify(translationCache));
+        }
+
+        async function showWordDef(word, el) {
+            const tooltip = document.getElementById('englishTooltip');
+            const loading = document.getElementById('tooltipLoading');
+            const content = document.getElementById('tooltipContent');
+            const transEl = document.getElementById('tooltipTranslation');
+
+            // 定位：找到触发元素
+            let targetEl = el;
+            if (!targetEl) {
+                targetEl = document.querySelector(`.cloze-word[data-word="${word}"]`);
+            }
+            if (targetEl) {
+                const rect = targetEl.getBoundingClientRect();
+                let left = rect.left;
+                let top = rect.bottom + 6;
+                let transform = 'none';
+                // 右侧空间不够时左移
+                if (left + 360 > window.innerWidth) {
+                    left = window.innerWidth - 370;
+                }
+                // 下方空间不够时往上弹
+                if (top + 180 > window.innerHeight) {
+                    top = rect.top - 6;
+                    transform = 'translateY(-100%)';
+                }
+                tooltip.style.left = Math.max(8, left) + 'px';
+                tooltip.style.top = top + 'px';
+                tooltip.style.transform = transform;
+            }
+            tooltip.classList.add('show');
+            loading.style.display = 'block';
+            loading.innerHTML = '<i class="fas fa-spinner"></i> 查询中...';
+            content.style.display = 'none';
+            transEl.style.display = 'none';
+
+            // 检查缓存
+            if (wordDefCache[word]) {
+                showWordDefResult(word, wordDefCache[word]);
+                translateWordDefs(word, wordDefCache[word]);
+                return;
+            }
+
+            try {
+                const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+                if (!res.ok) throw new Error('Not found');
+                const data = await res.json();
+                const entry = data[0];
+                const phonetic = entry.phonetics?.find(p => p.text)?.text || '';
+                const meanings = entry.meanings || [];
+                const result = {
+                    phonetic,
+                    defs: meanings.slice(0, 3).map(m => ({
+                        pos: m.partOfSpeech,
+                        def: m.definitions[0]?.definition || ''
+                    }))
+                };
+                wordDefCache[word] = result;
+                saveEnglishCache();
+
+                // 翻译英文释义为中文
+                showWordDefResult(word, result);
+                await translateWordDefs(word, result);
+            } catch(e) {
+                loading.innerHTML = `<div style="color:var(--gray-500);">未找到 "${word}" 的释义</div>`;
+            }
+        }
+
+        async function translateWordDefs(word, result) {
+            const defsEl = document.getElementById('tooltipDefs');
+            const defTexts = result.defs.map(d => d.def).join(' | ');
+
+            try {
+                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(defTexts)}&langpair=en|zh-CN`);
+                const data = await res.json();
+                const translated = data.responseData?.translatedText || '';
+                if (translated) {
+                    const transParts = translated.split(/[,，|]/).map(s => s.trim()).filter(s => s);
+                    result.defs.forEach((d, i) => {
+                        d.cn = transParts[i] || transParts[0] || '';
+                    });
+                    // 更新缓存
+                    wordDefCache[word] = result;
+                    saveEnglishCache();
+                    // 刷新显示
+                    showWordDefResult(word, result);
+                }
+            } catch(e) {
+                // 翻译失败，保持英文
+            }
+        }
+
+        function showWordDefResult(word, result) {
+            const loading = document.getElementById('tooltipLoading');
+            const content = document.getElementById('tooltipContent');
+            document.getElementById('tooltipWord').textContent = word;
+            document.getElementById('tooltipPhonetic').textContent = result.phonetic || '';
+            let defsHtml = '';
+            result.defs.forEach(d => {
+                const cn = d.cn || '';
+                defsHtml += `<div style="margin-bottom:6px;"><span class="tooltip-pos">${d.pos}</span><div class="tooltip-def">${cn ? cn : d.def}</div>${cn ? '<div style="font-size:0.8rem;color:var(--gray-400);margin-top:2px;">' + d.def + '</div>' : ''}</div>`;
+            });
+            document.getElementById('tooltipDefs').innerHTML = defsHtml;
+            loading.style.display = 'none';
+            content.style.display = 'block';
+        }
+
+        async function showSentenceTranslation(text, el) {
+            const tooltip = document.getElementById('englishTooltip');
+            const loading = document.getElementById('tooltipLoading');
+            const content = document.getElementById('tooltipContent');
+            const transEl = document.getElementById('tooltipTranslation');
+
+            // 定位到点击的句子下方
+            if (el) {
+                const rect = el.getBoundingClientRect();
+                let left = rect.left;
+                let top = rect.bottom + 6;
+                let transform = 'none';
+                if (left + 360 > window.innerWidth) left = window.innerWidth - 370;
+                if (top + 180 > window.innerHeight) {
+                    top = rect.top - 6;
+                    transform = 'translateY(-100%)';
+                }
+                tooltip.style.left = Math.max(8, left) + 'px';
+                tooltip.style.top = top + 'px';
+                tooltip.style.transform = transform;
+            }
+
+            tooltip.classList.add('show');
+            loading.style.display = 'block';
+            loading.innerHTML = '<i class="fas fa-spinner"></i> 翻译中...';
+            content.style.display = 'none';
+            transEl.style.display = 'none';
+
+            const cacheKey = text.substring(0, 50);
+            if (translationCache[cacheKey]) {
+                loading.style.display = 'none';
+                transEl.style.display = 'block';
+                document.getElementById('tooltipTransText').textContent = translationCache[cacheKey];
+                return;
+            }
+
+            try {
+                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|zh-CN`);
+                const data = await res.json();
+                const translated = data.responseData?.translatedText || '翻译失败';
+                translationCache[cacheKey] = translated;
+                saveEnglishCache();
+                loading.style.display = 'none';
+                transEl.style.display = 'block';
+                document.getElementById('tooltipTransText').textContent = translated;
+            } catch(e) {
+                loading.innerHTML = '<div style="color:var(--gray-500);">翻译请求失败</div>';
+            }
+        }
+
+        function wrapSentencesForTranslation(html) {
+            // 将段落文本中的句子包装为可点击的span
+            return html.replace(/([^.!?]+[.!?]\s*)/g, (match) => {
+                // 跳过包含blank标记的段
+                if (match.includes('{blank:') || match.includes('cloze-blank')) return match;
+                const text = match.trim();
+                if (text.length < 5) return match;
+                return `<span class="cloze-sentence" onclick="event.stopPropagation();showSentenceTranslation(this.textContent, this)">${match}</span>`;
+            });
+        }
+
+        function wrapWordsForDefinition(html) {
+            // 给段落中的英文单词添加点击事件（跳过blank标记和HTML标签）
+            return html.replace(/\b([a-zA-Z]{3,})\b/g, (match, word, offset) => {
+                // 跳过HTML标签内的内容
+                const before = html.substring(Math.max(0, offset - 50), offset);
+                if (before.includes('<span') || before.includes('</span>')) return match;
+                // 跳过blank-num相关
+                if (before.includes('blank-num')) return match;
+                return `<span class="cloze-sentence" onclick="event.stopPropagation();showWordDef('${word.toLowerCase()}', this)" style="cursor:pointer;border-bottom:1px dotted rgba(102,126,234,0.3);">${match}</span>`;
+            });
+        }
+
+        // 点击其他区域关闭浮层
+        document.addEventListener('click', (e) => {
+            const tooltip = document.getElementById('englishTooltip');
+            if (tooltip && tooltip.classList.contains('show')) {
+                if (!tooltip.contains(e.target) && !e.target.closest('.cloze-word') && !e.target.closest('.cloze-sentence')) {
+                    tooltip.classList.remove('show');
+                }
+            }
+        });
+
+        // 15选10按钮事件
+        document.getElementById('clozePrevBtn')?.addEventListener('click', () => {
+            if (clozeIndex > 0) { clozeIndex--; renderCloze(); }
+        });
+        document.getElementById('clozeNextBtn')?.addEventListener('click', () => {
+            if (clozeIndex < clozeData.length - 1) { clozeIndex++; renderCloze(); }
+        });
+        document.getElementById('clozeCheckBtn')?.addEventListener('click', checkCloze);
+
     </script>
 </body>
 </html>
