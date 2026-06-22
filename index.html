@@ -2646,7 +2646,10 @@
     <div class="english-tooltip" id="englishTooltip">
         <div class="tooltip-loading" id="tooltipLoading"><i class="fas fa-spinner"></i> 查询中...</div>
         <div id="tooltipContent" style="display:none;">
-            <div class="tooltip-word" id="tooltipWord"></div>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div class="tooltip-word" id="tooltipWord"></div>
+                <span class="option-help-btn" onclick="speak(document.getElementById('tooltipWord').textContent)" title="播放发音" style="font-size:0.8rem;"><i class="fas fa-volume-up"></i></span>
+            </div>
             <div class="tooltip-phonetic" id="tooltipPhonetic"></div>
             <div id="tooltipDefs"></div>
         </div>
@@ -3600,6 +3603,7 @@
 
     <script>
         // ===== 全局变量 =====
+        const APP_VERSION = '2.5.0';
         let questionBanks = [];
         let activeBankId = null;
         let currentBank = null;
@@ -4648,6 +4652,13 @@
                         textSpan.innerHTML = wrapWordsForDefinition(optTextContent);
                         textSpan.style.cssText = 'flex:1;min-width:0;';
                         optionText.appendChild(textSpan);
+                        const speakBtn = document.createElement('span');
+                        speakBtn.className = 'option-help-btn';
+                        speakBtn.innerHTML = '<i class="fas fa-volume-up" style="font-size:0.6rem;"></i>';
+                        speakBtn.title = '播放发音';
+                        speakBtn.style.cssText = 'background:rgba(16,185,129,0.1);color:#10b981;';
+                        speakBtn.onclick = (e) => { e.stopPropagation(); speak(optEnglish); };
+                        optionText.appendChild(speakBtn);
                         const helpBtn = document.createElement('span');
                         helpBtn.className = 'option-help-btn';
                         helpBtn.textContent = '?';
@@ -4662,6 +4673,13 @@
                         textSpan.textContent = optTextContent;
                         textSpan.style.cssText = 'flex:1;min-width:0;';
                         optionText.appendChild(textSpan);
+                        const speakBtn = document.createElement('span');
+                        speakBtn.className = 'option-help-btn';
+                        speakBtn.innerHTML = '<i class="fas fa-volume-up" style="font-size:0.6rem;"></i>';
+                        speakBtn.title = '播放发音';
+                        speakBtn.style.cssText = 'background:rgba(16,185,129,0.1);color:#10b981;';
+                        speakBtn.onclick = (e) => { e.stopPropagation(); speak(optEnglish); };
+                        optionText.appendChild(speakBtn);
                         const helpBtn = document.createElement('span');
                         helpBtn.className = 'option-help-btn';
                         helpBtn.innerHTML = '<i class="fas fa-language" style="font-size:0.6rem;"></i>';
@@ -4823,6 +4841,11 @@
             
             userAnswers[questionId].correct = isCorrect;
             userAnswers[questionId].checked = true;
+            
+            // 触觉反馈
+            if (settings.mobileVibrate === 'enabled' && navigator.vibrate) {
+                navigator.vibrate(isCorrect ? [50] : [100, 50, 100]);
+            }
             
             // 更新统计
             updateStatistics(isCorrect);
@@ -5660,8 +5683,8 @@
             }
             
             // 获取跳转延迟时间
-            const delaySeconds = parseInt(settings.autoNextOnCorrect);
-            if (isNaN(delaySeconds) || delaySeconds <= 0) {
+            const delaySeconds = parseFloat(settings.autoNextOnCorrect);
+            if (isNaN(delaySeconds) || delaySeconds < 0.1) {
                 return;
             }
             
@@ -5670,34 +5693,26 @@
             if (feedbackTitle && answerFeedback.classList.contains('correct')) {
                 feedbackTitle.innerHTML = `<i class="fas fa-check-circle"></i> 回答正确！<span id="countdownTimer"></span>`;
                 
-                // 开始倒计时
-                let remaining = delaySeconds;
+                // 开始倒计时（使用毫秒精度）
                 const countdownElement = document.getElementById('countdownTimer');
                 
-                const updateCountdown = () => {
-                    if (countdownElement) {
-                        countdownElement.textContent = ` (${remaining}秒后跳转)`;
+                const doJump = () => {
+                    if (currentQuestionIndex < currentQuestions.length - 1) {
+                        currentQuestionIndex++;
+                        currentPage = Math.floor(currentQuestionIndex / questionsPerPage);
+                        showQuestion(currentQuestionIndex);
+                        updatePagination();
+                    } else {
+                        finishPractice();
                     }
-                    
-                    if (remaining <= 0) {
-                        // 跳转到下一题
-                        if (currentQuestionIndex < currentQuestions.length - 1) {
-                            currentQuestionIndex++;
-                            currentPage = Math.floor(currentQuestionIndex / questionsPerPage);
-                            showQuestion(currentQuestionIndex);
-                            updatePagination();
-                        } else {
-                            finishPractice();
-                        }
-                        return;
-                    }
-                    
-                    remaining--;
-                    autoNextTimer = setTimeout(updateCountdown, 1000);
                 };
                 
-                // 立即显示一次
-                updateCountdown();
+                // 显示剩余秒数
+                if (countdownElement) {
+                    countdownElement.textContent = ` (${delaySeconds}秒后跳转)`;
+                }
+                
+                autoNextTimer = setTimeout(doJump, delaySeconds * 1000);
             }
         }
 
@@ -6609,7 +6624,8 @@
                 html += `<div class="${cls}" data-word="${word}" onclick="clickClozeWord('${word.replace(/'/g, "\\'")}')">`;
                 html += word;
                 if (isDefMode) {
-                    html += `<span onclick="event.stopPropagation();showWordDef('${word.replace(/'/g, "\\'")}', this.parentElement)" style="margin-left:6px;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:rgba(102,126,234,0.1);color:#667eea;font-size:0.7rem;cursor:pointer;flex-shrink:0;" title="查看释义">?</span>`;
+                    html += `<span onclick="event.stopPropagation();speak('${word.replace(/'/g, "\\'")}')" style="margin-left:4px;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:rgba(16,185,129,0.1);color:#10b981;font-size:0.65rem;cursor:pointer;flex-shrink:0;" title="播放发音"><i class="fas fa-volume-up"></i></span>`;
+                    html += `<span onclick="event.stopPropagation();showWordDef('${word.replace(/'/g, "\\'")}', this.parentElement)" style="margin-left:2px;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:rgba(102,126,234,0.1);color:#667eea;font-size:0.7rem;cursor:pointer;flex-shrink:0;" title="查看释义">?</span>`;
                 }
                 html += '</div>';
             });
@@ -6694,6 +6710,11 @@
                     blankEl.classList.add('incorrect');
                     blankEl.classList.remove('correct');
                 }
+            }
+
+            // 触觉反馈
+            if (settings.mobileVibrate === 'enabled' && navigator.vibrate) {
+                navigator.vibrate(correct === 10 ? [50] : [100, 50, 100]);
             }
 
             const feedback = document.getElementById('clozeFeedback');
@@ -6809,21 +6830,17 @@
 
         async function translateWordDefs(word, result) {
             const defsEl = document.getElementById('tooltipDefs');
-            const defTexts = result.defs.map(d => d.def).join(' | ');
 
             try {
-                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(defTexts)}&langpair=en|zh-CN`);
+                const res = await fetch('https://lingva.ml/api/v1/en/zh/' + encodeURIComponent(word));
                 const data = await res.json();
-                const translated = data.responseData?.translatedText || '';
+                const translated = data.translation || '';
                 if (translated) {
-                    const transParts = translated.split(/[,，|]/).map(s => s.trim()).filter(s => s);
                     result.defs.forEach((d, i) => {
-                        d.cn = transParts[i] || transParts[0] || '';
+                        d.cn = translated;
                     });
-                    // 更新缓存
                     wordDefCache[word] = result;
                     saveEnglishCache();
-                    // 刷新显示
                     showWordDefResult(word, result);
                 }
             } catch(e) {
@@ -6844,6 +6861,11 @@
             document.getElementById('tooltipDefs').innerHTML = defsHtml;
             loading.style.display = 'none';
             content.style.display = 'block';
+        }
+
+        function speak(word) {
+            const audio = new Audio('https://dict.youdao.com/dictvoice?audio=' + encodeURIComponent(word) + '&type=1');
+            audio.play().catch(() => {});
         }
 
         async function showSentenceTranslation(text, el) {
@@ -6883,9 +6905,9 @@
             }
 
             try {
-                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|zh-CN`);
+                const res = await fetch('https://lingva.ml/api/v1/en/zh/' + encodeURIComponent(text));
                 const data = await res.json();
-                const translated = data.responseData?.translatedText || '翻译失败';
+                const translated = data.translation || '翻译失败';
                 translationCache[cacheKey] = translated;
                 saveEnglishCache();
                 loading.style.display = 'none';
@@ -6939,9 +6961,43 @@
         });
         document.getElementById('clozeCheckBtn')?.addEventListener('click', checkCloze);
 
-        // PWA Service Worker
+        // PWA Service Worker + Update Check
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(() => {});
+            navigator.serviceWorker.register('sw.js').then(reg => {
+                // Check for updates
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            showUpdateBanner();
+                        }
+                    });
+                });
+                // Check version
+                if (navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({ type: 'CHECK_VERSION' });
+                }
+                navigator.serviceWorker.addEventListener('message', e => {
+                    if (e.data && e.data.type === 'VERSION_INFO' && e.data.version !== APP_VERSION) {
+                        showUpdateBanner();
+                    }
+                });
+            }).catch(() => {});
+        }
+
+        function showUpdateBanner() {
+            if (document.getElementById('updateBanner')) return;
+            const banner = document.createElement('div');
+            banner.id = 'updateBanner';
+            banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:10px 20px;display:flex;align-items:center;justify-content:center;gap:12px;animation:fadeIn 0.3s ease;cursor:pointer;font-size:0.85rem;';
+            banner.innerHTML = '<i class="fas fa-download"></i><span>发现新版本，点击更新</span>';
+            banner.onclick = () => {
+                if (navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+                }
+                window.location.reload(true);
+            };
+            document.body.appendChild(banner);
         }
 
     </script>

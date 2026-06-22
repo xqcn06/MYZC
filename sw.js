@@ -1,4 +1,5 @@
-const CACHE_NAME = 'myzc-v2.4.2';
+const CACHE_NAME = 'myzc-v2.5.0';
+const APP_VERSION = '2.5.0';
 const ASSETS = [
   './',
   './index.html',
@@ -21,6 +22,15 @@ self.addEventListener('activate', e => {
     )
   );
   self.clients.claim();
+});
+
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'CHECK_VERSION') {
+    e.source.postMessage({ type: 'VERSION_INFO', version: APP_VERSION });
+  }
+  if (e.data && e.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('fetch', e => {
