@@ -2933,7 +2933,7 @@
                         <div class="changelog-section">
                             <h4><i class="fas fa-arrow-up text-primary"></i> 优化</h4>
                             <ul>
-                                <li><strong>翻译API</strong>: 从MyMemory换为Lingva Translate（Google后端），中文质量更好</li>
+                                <li><strong>翻译API</strong>: 优化翻译流程，单词直接翻译为中文</li>
                             </ul>
                         </div>
                     </div>
@@ -6856,23 +6856,17 @@
         }
 
         async function translateWordDefs(word, result) {
-            const defsEl = document.getElementById('tooltipDefs');
-
             try {
-                const res = await fetch('https://lingva.ml/api/v1/en/zh/' + encodeURIComponent(word));
+                const res = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(word) + '&langpair=en|zh-CN');
                 const data = await res.json();
-                const translated = data.translation || '';
+                const translated = data.responseData?.translatedText || '';
                 if (translated) {
-                    result.defs.forEach((d, i) => {
-                        d.cn = translated;
-                    });
+                    result.defs.forEach(d => { d.cn = translated; });
                     wordDefCache[word] = result;
                     saveEnglishCache();
                     showWordDefResult(word, result);
                 }
-            } catch(e) {
-                // 翻译失败，保持英文
-            }
+            } catch(e) {}
         }
 
         function showWordDefResult(word, result) {
@@ -6932,9 +6926,9 @@
             }
 
             try {
-                const res = await fetch('https://lingva.ml/api/v1/en/zh/' + encodeURIComponent(text));
+                const res = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=en|zh-CN');
                 const data = await res.json();
-                const translated = data.translation || '翻译失败';
+                const translated = data.responseData?.translatedText || '翻译失败';
                 translationCache[cacheKey] = translated;
                 saveEnglishCache();
                 loading.style.display = 'none';
